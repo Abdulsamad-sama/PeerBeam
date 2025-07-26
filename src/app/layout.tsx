@@ -15,8 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "My-Ecosystem",
-  description: "share videos, files and document locally",
+  title: "PeerBeam",
+  description:
+    " A blazing-fast, peer-to-peer file transfer web app powered by WebRTC,",
 };
 
 export default function RootLayout({

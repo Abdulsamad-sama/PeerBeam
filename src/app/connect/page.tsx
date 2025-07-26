@@ -1,5 +1,7 @@
+"use client";
 import React from "react";
 import QRCode from "react-qr-code";
+import { io } from "socket.io-client";
 
 const connect = () => {
   return (
@@ -7,11 +9,17 @@ const connect = () => {
       <h1 className="text-2xl font-bold">Connect to Device</h1>
       <p>Scan the QR code below to connect to your device:</p>
       <div className="flex justify-center mt-4">
-        <QRCode value="https://example.com/connect" size={128} />
+        <QRCode value="https://localhost:3001" size={128} />
       </div>
-      <p className="mt-4">
-        Follow the instructions on your device to complete the connection.
-      </p>
+      <button
+        type="button"
+        className="mt-4"
+        onClick={() => {
+          const socket = io();
+        }}
+      >
+        connect to andriod device
+      </button>
     </div>
   );
 };
