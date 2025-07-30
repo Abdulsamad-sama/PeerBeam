@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
+import { ToAndroid, ToPc, ToiOS } from "../connectOptions/connectOptions";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

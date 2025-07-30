@@ -3,8 +3,9 @@ import QRCode from "react-qr-code";
 import Image from "next/image";
 import Link from "next/link";
 import Connected from "@/components/connected/connected";
+import { ToAndroid, ToPc, ToiOS } from "../connectOptions/connectOptions";
+
 const Section = () => {
-  console.log(QRCode);
   return (
     <section className="hidden flex-col justify-between relative  border-r border-gray-200 dark:border-gray-700 w-1/5 p-4 pr-7 text-lg sm:flex">
       <main className="flex flex-col gap-4">
@@ -46,15 +47,15 @@ const Section = () => {
 
         {/* connect */}
         <div>
-          <ul className="mt-4 space-y-2">
-            <li>
-              <Link href="/connect">Connect to PC</Link>
+          <ul className="mt-4 space-y-2 ">
+            <li className="border-b-2 border-b-gray-200">
+              <ToAndroid />
             </li>
-            <li>
-              <Link href="/connect">Connect to Android</Link>
+            <li className="border-b-2 border-b-gray-200">
+              <ToiOS />
             </li>
-            <li>
-              <Link href="/connect">Connect to iOS</Link>
+            <li className="border-b-2 border-b-gray-200 ">
+              <ToPc />
             </li>
           </ul>
         </div>
