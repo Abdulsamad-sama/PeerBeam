@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { FaPlus } from "react-icons/fa6";
+import { FaCaretRight, FaPlus } from "react-icons/fa6";
 import { useState } from "react";
 
 export default function Home() {
@@ -33,15 +33,20 @@ export default function Home() {
         handleFile(e.dataTransfer.files);
       }}
     >
-      {/* Show selected file names */}
+      {/* Show how many file is selected*/}
       {files.length > 0 && (
-        <div className="mt-4 w-full max-w-md">
-          <h2 className="font-semibold mb-2">Selected Files:</h2>
-          <ul className="list-disc pl-5 text-gray-700">
-            {files.map((file, idx) => (
-              <li key={idx}>{file.name}</li>
-            ))}
-          </ul>
+        <div className="relative w-38 h-38 p-4 text-center">
+          <div className="absolute top-0 left-0 w-8 h-8 border-t-8 border-l-8 border-gray-400 rounded-tl-2xl"></div>
+
+          <div className="absolute top-0 right-0 w-8 h-8 border-t-8 border-r-8 border-gray-400 rounded-tr-2xl"></div>
+
+          <div className="absolute bottom-0 left-0 w-8 h-8 border-b-8 border-l-8 border-gray-400 rounded-bl-2xl"></div>
+
+          <div className="absolute bottom-0 right-0 w-8 h-8 border-b-8 border-r-8 border-gray-400 rounded-br-2xl"></div>
+
+          <p className="text-center mt-8 font-extrabold text-6xl text-gray-500">
+            {files.length}
+          </p>
         </div>
       )}
 
@@ -70,8 +75,12 @@ export default function Home() {
       </div>
 
       {files.length > 0 && (
-        <button type="button" className="">
+        <button
+          type="button"
+          className="absolute bottom-4 right-4 p-1 rounded-lg text-center bg-green-100 hover:bg-green-400 transition-colors"
+        >
           Send
+          <FaCaretRight className="ml-1 text-center inline-flex" />
         </button>
       )}
     </div>
