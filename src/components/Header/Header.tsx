@@ -14,16 +14,16 @@ const Header = () => {
 
   return (
     // Desktop view sets automatiacally
-    <header className="  w-full h-[60px] flex bg-gray-800  text-white text-lg p-4 justify-around items-center">
+    <header className=" w-full h-[60px] flex bg-gray-800  text-white text-lg p-4 justify-around items-center">
       <div
-        className="inline-flex sm:hidden"
+        className="inline-flex sm:hidden mr-2 cursor-pointer"
         onClick={() => setIsMenuOpen((prev) => !prev)}
       >
         {isMenuOpen ? <IoClose /> : <FaBars />}
       </div>
       <h1 className="text-3xl font-bold">My-Ecosystem</h1>
 
-      <nav className="flex items-center justify-between">
+      <nav className="flex items-right text-right justify-between gap-x-4">
         {/* shows when in desktop mode */}
         {/* to be added to mobile menu side-bar   */}
         <ul className=" hidden sm:flex items-center space-x-4">
@@ -35,41 +35,45 @@ const Header = () => {
           </li>
         </ul>
         {/* stays constant both in mobile and desktop view */}
-        <button
-          type="button"
-          className="prim-color text-lg hover:underline underline-offset-4 flex items-center gap-2"
-          onClick={() => setIsConnectOpen((prev) => !prev)}
-        >
-          Connect
-          {isConnectOpen ? <FaCaretUp /> : <FaCaretDown />}
-        </button>
+        {/* button to show connect options */}
+        <div className="relative cursor-pointer">
+          <button
+            type="button"
+            className="prim-color text-lg hover:underline underline-offset-4 flex items-center gap-2"
+            onClick={() => setIsConnectOpen((prev) => !prev)}
+          >
+            Connect
+            {isConnectOpen ? <FaCaretUp /> : <FaCaretDown />}
+          </button>
+
+          {/* hidden connect menu*/}
+          <div
+            className={`${
+              isConnectOpen ? "flex" : "hidden"
+            } absolute top-[46px] -right-2 text-black  items-center gap-2 w-48 p-4 rounded-lg shadow-lg flex-col`}
+          >
+            <ol className="mt-4 space-y-2 ">
+              <li className="border-b-2 border-b-gray-200">
+                <ToAndroid />
+              </li>
+              <li className="border-b-2 border-b-gray-200">
+                <ToiOS />
+              </li>
+              <li className="border-b-2 border-b-gray-200 ">
+                <ToPc />
+              </li>
+            </ol>
+          </div>
+        </div>
       </nav>
 
       {/* hidden menu information */}
-      {/* hidden connect menu*/}
-      <div
-        className={`absolute top-[65px] ${
-          isConnectOpen ? "flex" : "hidden"
-        } bg0-color items-center gap-2`}
-      >
-        <ol className="mt-4 space-y-2 ">
-          <li className="border-b-2 border-b-gray-200">
-            <ToAndroid />
-          </li>
-          <li className="border-b-2 border-b-gray-200">
-            <ToiOS />
-          </li>
-          <li className="border-b-2 border-b-gray-200 ">
-            <ToPc />
-          </li>
-        </ol>
-      </div>
 
       {/* hidden side menu */}
       <section
         className={`${
           isMenuOpen ? "flex" : "hidden"
-        } flex-col justify-between relative  border-r border-gray-200 dark:border-gray-700 w-1/5 p-4 pr-7 text-lg`}
+        } absolute left-0 top-[60px] w-50 h-full flex-col justify-between text-black border-r border-gray-200 dark:border-gray-700  p-4 pr-7 text-lg shadow-2xl `}
       >
         <main className="flex flex-col gap-4">
           {/* username/ information */}
@@ -107,6 +111,18 @@ const Header = () => {
               </li>
             </ul>
           </div>
+
+          {/* added feature from header fo mobile */}
+          <section>
+            <ul className=" flex flex-col items-center space-y-4">
+              <li>
+                <Link href="/">History</Link>
+              </li>
+              <li>
+                <Link href="/ecosystem">Ecosystem</Link>
+              </li>
+            </ul>
+          </section>
 
           {/* connect */}
           <div>
