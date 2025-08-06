@@ -12,7 +12,7 @@ const Header = () => {
 
   return (
     <div>
-      {/* DESKTOP VIEW */}
+      {/*Desktop view sets automatiacally*/}
       <header className="  w-full h-[60px] flex bg-gray-800  text-white text-lg p-4 justify-around items-center">
         <div
           className="inline-flex sm:hidden"
@@ -23,6 +23,7 @@ const Header = () => {
         <h1 className="text-3xl font-bold">My-Ecosystem</h1>
 
         <nav className="flex items-center justify-between">
+          {/* shows when in desktop mode */}
           <ul className=" hidden sm:flex items-center space-x-4">
             <li>
               <Link href="/">History</Link>
@@ -31,6 +32,7 @@ const Header = () => {
               <Link href="/ecosystem">Ecosystem</Link>
             </li>
           </ul>
+          {/* stays constant both in mobile and desktop view */}
           <button
             type="button"
             className="prim-color text-lg hover:underline underline-offset-4 flex items-center gap-2"
@@ -39,6 +41,20 @@ const Header = () => {
             Connect
             {isConnectOpen ? <FaCaretUp /> : <FaCaretDown />}
           </button>
+
+          <div>
+            <ol className="mt-4 space-y-2 ">
+              <li className="border-b-2 border-b-gray-200">
+                <ToAndroid />
+              </li>
+              <li className="border-b-2 border-b-gray-200">
+                <ToiOS />
+              </li>
+              <li className="border-b-2 border-b-gray-200 ">
+                <ToPc />
+              </li>
+            </ol>
+          </div>
         </nav>
       </header>
     </div>
