@@ -9,7 +9,7 @@ import { BsExclamationCircle, BsExclamationCircleFill } from "react-icons/bs";
 
 const Section = () => {
   return (
-    <section className="hidden flex-col justify-between relative  border-r border-gray-200 dark:border-gray-700 w-1/5 p-2 text-lg sm:flex">
+    <section className="relative hidden sm:flex flex-col justify-between w-60 p-2 text-lg border-r border-gray-200 dark:border-gray-700">
       <main className="flex flex-col gap-4">
         {/* username/ information */}
         <header className="flex flex-col justify-center items-center border-b-2 border-gray-500 dark:border-gray-700 pb-2">

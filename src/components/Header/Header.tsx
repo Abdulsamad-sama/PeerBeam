@@ -23,11 +23,8 @@ const Header = () => {
 
   useEffect(() => {
     function handleClickOutside(event: Event) {
-      if (
-        menuRef.current &&
-        event.target &&
-        !menuRef.current.contains(event.target as Node)
-      ) {
+      const target = event.target as Node;
+      if (menuRef.current && target && !menuRef.current.contains(target)) {
         setIsMenuOpen(false);
       }
     }
@@ -58,10 +55,10 @@ const Header = () => {
         </ul>
         {/* stays constant both in mobile and desktop view */}
         {/* button to show connect options */}
-        <div className="relative cursor-pointer">
+        <div className="relative cursor-pointer hover:underline underline-offset-4">
           <button
             type="button"
-            className="prim-color text-lg hover:underline underline-offset-4 flex items-center gap-2"
+            className="prim-color text-lg  flex items-center gap-2"
             onClick={() => setIsConnectOpen((prev) => !prev)}
           >
             Connect
@@ -70,10 +67,9 @@ const Header = () => {
 
           {/* hidden connect menu*/}
           <div
-            ref={menuRef}
             className={`${
               isConnectOpen ? "flex" : "hidden"
-            } absolute top-[46px] -right-2 text-black  items-center gap-2 w-48 p-4 rounded-lg shadow-lg flex-col`}
+            } absolute top-[46px] -right-2 w-48 p-2 text-black  items-center gap-2 rounded-lg shadow-lg flex-col`}
           >
             <ol className="mt-4 space-y-2 ">
               <li className="border-b-2 border-b-gray-200">
@@ -97,7 +93,7 @@ const Header = () => {
         ref={menuRef}
         className={`${
           isMenuOpen ? "flex" : "hidden"
-        } absolute left-0 top-[60px] w-50 h-[91.8%] p-2 text-lg flex-col justify-between text-black border-r border-gray-200 dark:border-gray-700 shadow-2xl`}
+        } absolute sm:hidden left-0 top-[60px] w-50 h-[89%] p-2 text-lg flex-col justify-between text-black border-r border-gray-200 dark:border-gray-700 shadow-2xl`}
       >
         <main className="flex flex-col gap-4">
           {/* username/ information */}
