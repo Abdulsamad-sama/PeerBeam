@@ -25,7 +25,6 @@ const Header = () => {
 
       <nav className="flex items-right text-right justify-between gap-x-4">
         {/* shows when in desktop mode */}
-        {/* to be added to mobile menu side-bar   */}
         <ul className=" hidden sm:flex items-center space-x-4">
           <li>
             <Link href="/">History</Link>
@@ -69,11 +68,11 @@ const Header = () => {
 
       {/* hidden menu information */}
 
-      {/* hidden side menu */}
+      {/* hidden section menu for mobile view */}
       <section
         className={`${
           isMenuOpen ? "flex" : "hidden"
-        } absolute left-0 top-[60px] w-50 h-full flex-col justify-between text-black border-r border-gray-200 dark:border-gray-700  p-4 pr-7 text-lg shadow-2xl `}
+        } absolute left-0 top-[60px] w-50 h-[91.8%] p-4 pr-7 text-lg flex-col justify-between text-black border-r border-gray-200 dark:border-gray-700 shadow-2xl`}
       >
         <main className="flex flex-col gap-4">
           {/* username/ information */}
@@ -112,18 +111,6 @@ const Header = () => {
             </ul>
           </div>
 
-          {/* added feature from header fo mobile */}
-          <section>
-            <ul className=" flex flex-col items-center space-y-4">
-              <li>
-                <Link href="/">History</Link>
-              </li>
-              <li>
-                <Link href="/ecosystem">Ecosystem</Link>
-              </li>
-            </ul>
-          </section>
-
           {/* connect */}
           <div>
             <ul className="mt-4 space-y-2 ">
@@ -138,6 +125,18 @@ const Header = () => {
               </li>
             </ul>
           </div>
+
+          {/* added feature from header fo mobile */}
+          <section>
+            <ul className="mt-4 space-y-4">
+              <li className="border-b-2 border-b-gray-200">
+                <Link href="/">History</Link>
+              </li>
+              <li className="border-b-2 border-b-gray-200">
+                <Link href="/ecosystem">Ecosystem</Link>
+              </li>
+            </ul>
+          </section>
         </main>
 
         {/* Other information */}
