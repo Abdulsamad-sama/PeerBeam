@@ -1,5 +1,7 @@
 "use client";
 import React, { useState } from "react";
+import { BsLaptop } from "react-icons/bs";
+import { MdPhoneAndroid, MdPhoneIphone } from "react-icons/md";
 import { io } from "socket.io-client";
 
 const socket = io();
@@ -24,7 +26,11 @@ export function ToAndroid() {
   const { roomId, connected, handleConnect } = useConnectOptions();
   return (
     <>
-      <button onClick={() => handleConnect("android")} className="">
+      <button
+        onClick={() => handleConnect("android")}
+        className="flex items-center gap-1 cursor-pointer"
+      >
+        <MdPhoneAndroid />
         Connect to Android
       </button>
       {connected && (
@@ -38,7 +44,11 @@ export function ToiOS() {
   const { roomId, connected, handleConnect } = useConnectOptions();
   return (
     <>
-      <button onClick={() => handleConnect("iOS")} className="">
+      <button
+        onClick={() => handleConnect("iOS")}
+        className="flex items-center gap-2 cursor-pointer"
+      >
+        <MdPhoneIphone />
         Connect to iOS
       </button>
       {connected && (
@@ -52,7 +62,11 @@ export function ToPc() {
   const { roomId, connected, handleConnect } = useConnectOptions();
   return (
     <>
-      <button onClick={() => handleConnect("PC")} className=" transition">
+      <button
+        onClick={() => handleConnect("PC")}
+        className="flex items-center gap-2 cursor-pointer"
+      >
+        <BsLaptop />
         Connect to PC
       </button>
       {connected && (

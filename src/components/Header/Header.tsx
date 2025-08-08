@@ -1,16 +1,39 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { useState } from "react";
-import { FaBars, FaCaretDown, FaCaretUp } from "react-icons/fa";
+import { useState, useRef, useEffect } from "react";
+import {
+  FaBars,
+  FaCaretDown,
+  FaCaretUp,
+  FaRegUserCircle,
+  FaStar,
+  FaUserCog,
+  FaUserPlus,
+} from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { ToAndroid, ToPc, ToiOS } from "../connectOptions/connectOptions";
 import Connected from "@/components/connected/connected";
+import { BsExclamationCircleFill } from "react-icons/bs";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isConnectOpen, setIsConnectOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: Event) {
+      if (
+        menuRef.current &&
+        event.target &&
+        !menuRef.current.contains(event.target as Node)
+      ) {
+        setIsMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     // Desktop view sets automatiacally
@@ -47,6 +70,7 @@ const Header = () => {
 
           {/* hidden connect menu*/}
           <div
+            ref={menuRef}
             className={`${
               isConnectOpen ? "flex" : "hidden"
             } absolute top-[46px] -right-2 text-black  items-center gap-2 w-48 p-4 rounded-lg shadow-lg flex-col`}
@@ -70,21 +94,16 @@ const Header = () => {
 
       {/* hidden section menu for mobile view */}
       <section
+        ref={menuRef}
         className={`${
           isMenuOpen ? "flex" : "hidden"
-        } absolute left-0 top-[60px] w-50 h-[91.8%] p-4 pr-7 text-lg flex-col justify-between text-black border-r border-gray-200 dark:border-gray-700 shadow-2xl`}
+        } absolute left-0 top-[60px] w-50 h-[91.8%] p-2 text-lg flex-col justify-between text-black border-r border-gray-200 dark:border-gray-700 shadow-2xl`}
       >
         <main className="flex flex-col gap-4">
           {/* username/ information */}
           <header className="flex flex-col justify-center items-center border-b-2 border-gray-500 dark:border-gray-700 pb-2">
             <div className="flex justify-around">
-              <Image
-                src="/vercel.svg"
-                alt="U"
-                height={20}
-                width={20}
-                className=" bg-black m-1"
-              />
+              <FaRegUserCircle className="text-3xl" />
               <h1>Username</h1>
             </div>
             <Connected />
@@ -143,16 +162,34 @@ const Header = () => {
         <footer className="">
           <ul className="mt-4 space-y-2">
             <li>
-              <Link href="/settings">Settings</Link>
+              <Link
+                href="/settings"
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <FaUserCog />
+                Settings
+              </Link>
             </li>
             <li>
-              <Link href="">Invite friends</Link>
+              <Link href="" className="flex items-center gap-2 cursor-pointer">
+                <FaUserPlus />
+                Invite friends
+              </Link>
             </li>
             <li>
-              <Link href="/about">About</Link>
+              <Link
+                href="/about"
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <BsExclamationCircleFill />
+                About
+              </Link>
             </li>
-            <li>
-              <Link href="">Rate us</Link>
+            <li className="flex items-center gap-2 cursor-pointer">
+              <Link href="" className="flex items-center gap-2 cursor-pointer">
+                <FaStar />
+                Rate us
+              </Link>
             </li>
           </ul>
         </footer>

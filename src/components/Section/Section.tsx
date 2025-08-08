@@ -4,21 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import Connected from "@/components/connected/connected";
 import { ToAndroid, ToPc, ToiOS } from "../connectOptions/connectOptions";
+import { FaRegUserCircle, FaStar, FaUserCog, FaUserPlus } from "react-icons/fa";
+import { BsExclamationCircle, BsExclamationCircleFill } from "react-icons/bs";
 
 const Section = () => {
   return (
-    <section className="hidden flex-col justify-between relative  border-r border-gray-200 dark:border-gray-700 w-1/5 p-4 pr-7 text-lg sm:flex">
+    <section className="hidden flex-col justify-between relative  border-r border-gray-200 dark:border-gray-700 w-1/5 p-2 text-lg sm:flex">
       <main className="flex flex-col gap-4">
         {/* username/ information */}
         <header className="flex flex-col justify-center items-center border-b-2 border-gray-500 dark:border-gray-700 pb-2">
-          <div className="flex justify-around">
-            <Image
-              src="/vercel.svg"
-              alt="U"
-              height={20}
-              width={20}
-              className=" bg-black m-1"
-            />
+          <div className="flex justify-center gap-2">
+            <FaRegUserCircle />
             <h1>Username</h1>
           </div>
           <Connected />
@@ -65,16 +61,34 @@ const Section = () => {
       <footer className="">
         <ul className="mt-4 space-y-2">
           <li>
-            <Link href="/settings">Settings</Link>
+            <Link
+              href="/settings"
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              <FaUserCog />
+              Settings
+            </Link>
           </li>
           <li>
-            <Link href="">Invite friends</Link>
+            <Link href="" className="flex items-center gap-2 cursor-pointer">
+              <FaUserPlus />
+              Invite friends
+            </Link>
           </li>
           <li>
-            <Link href="/about">About</Link>
+            <Link
+              href="/about"
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              <BsExclamationCircleFill />
+              About
+            </Link>
           </li>
-          <li>
-            <Link href="">Rate us</Link>
+          <li className="flex items-center gap-2 cursor-pointer">
+            <Link href="" className="flex items-center gap-2 cursor-pointer">
+              <FaStar />
+              Rate us
+            </Link>
           </li>
         </ul>
       </footer>
