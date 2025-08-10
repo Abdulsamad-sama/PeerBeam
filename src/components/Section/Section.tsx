@@ -5,11 +5,11 @@ import Link from "next/link";
 import Connected from "@/components/connected/connected";
 import { ToAndroid, ToPc, ToiOS } from "../connectOptions/connectOptions";
 import { FaRegUserCircle, FaStar, FaUserCog, FaUserPlus } from "react-icons/fa";
-import { BsExclamationCircle, BsExclamationCircleFill } from "react-icons/bs";
+import { BsExclamationCircleFill } from "react-icons/bs";
 
 const Section = () => {
   return (
-    <section className="relative hidden sm:flex flex-col justify-between w-60 p-2 text-lg border-r border-gray-200 dark:border-gray-700">
+    <section className="relative hidden sm:flex flex-col justify-between h-full w-60 p-2 overflow-hidden  text-lg border-r border-gray-200 dark:border-gray-700">
       <main className="flex flex-col gap-4">
         {/* username/ information */}
         <header className="flex flex-col justify-center items-center border-b-2 border-gray-500 dark:border-gray-700 pb-2">

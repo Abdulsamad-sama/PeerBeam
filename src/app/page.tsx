@@ -18,7 +18,7 @@ export default function Home() {
 
   return (
     <div
-      className=" relative flex w- flex-col gap-8 items-center justify-center h-full"
+      className=" relative flex flex-col gap-8 items-center justify-center h-full"
       onDragOver={(e) => {
         e.preventDefault();
         e.currentTarget.classList.add("border-blue-500");
