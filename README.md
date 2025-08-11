@@ -48,7 +48,7 @@ Planned steps:
 ## 🔍 Roadmap
 
 - [x] Project setup
-- [ ] PWA implementation
+- [x] PWA implementation
 - [ ] QR-based pairing
 - [ ] WebRTC data channel logic
 - [ ] Backend signaling server
