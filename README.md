@@ -48,11 +48,11 @@ Planned steps:
 ## 🔍 Roadmap
 
 - [x] Project setup
+- [x] File transfer UI/UX
 - [x] PWA implementation
+- [ ] Backend signaling server
 - [ ] QR-based pairing
 - [ ] WebRTC data channel logic
-- [ ] Backend signaling server
-- [ ] File transfer UI/UX
 - [ ] Local discovery over LAN
 
 ---
