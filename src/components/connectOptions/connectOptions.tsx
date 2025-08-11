@@ -22,6 +22,10 @@ function useConnectOptions() {
   return { roomId, connected, handleConnect };
 }
 
+const handleConect = () => {
+  return;
+};
+
 export function ToAndroid() {
   const { roomId, connected, handleConnect } = useConnectOptions();
   return (

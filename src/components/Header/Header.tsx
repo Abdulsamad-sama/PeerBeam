@@ -58,7 +58,7 @@ const Header = () => {
         <div className="relative cursor-pointer hover:underline underline-offset-4">
           <button
             type="button"
-            className="prim-color text-lg  flex items-center gap-2"
+            className="border-none prim-color text-lg  flex items-center gap-2"
             onClick={() => setIsConnectOpen((prev) => !prev)}
           >
             Connect
