@@ -43,8 +43,11 @@ const Section = () => {
 
         {/* connect */}
         <div className="mt-4">
-          <Link href="/connect" className="w-full bg-gray-800">
-            Connect
+          <Link
+            href="/connect"
+            className="flex items-center gap-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded"
+          >
+            Connects
           </Link>
         </div>
 

@@ -1,5 +1,5 @@
 import React from "react";
-import BackToHomeBtn from "@/components/backtohomebtn/BackToHomeBtn";
+import BackToHomeBtn from "@/components/Backtohomebtn/BackToHomeBtn";
 
 const settings = () => {
   return (
@@ -15,12 +15,14 @@ const settings = () => {
       </div>
       <div>
         <h2>Theme</h2>
+        <p>Dark Mode</p>
+        <p>Light Mode</p>
       </div>
       <div>
         <h2>Clear History</h2>
       </div>
       <div>
-        <h3>version</h3>
+        <h3>version 1.0</h3>
       </div>
     </div>
   );

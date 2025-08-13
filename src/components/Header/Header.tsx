@@ -66,23 +66,7 @@ const Header = () => {
           </button>
 
           {/* hidden connect menu*/}
-          <div
-            className={`${
-              isConnectOpen ? "flex" : "hidden"
-            } absolute top-[46px] -right-2 w-48 p-2 text-black  items-center gap-2 rounded-lg shadow-lg flex-col`}
-          >
-            <ol className="mt-4 space-y-2 ">
-              <li className="border-b-2 border-b-gray-200">
-                <ToAndroid />
-              </li>
-              <li className="border-b-2 border-b-gray-200">
-                <ToiOS />
-              </li>
-              <li className="border-b-2 border-b-gray-200 ">
-                <ToPc />
-              </li>
-            </ol>
-          </div>
+          {/*  */}
         </div>
       </nav>
 
@@ -93,7 +77,7 @@ const Header = () => {
         ref={menuRef}
         className={`${
           isMenuOpen ? "flex" : "hidden"
-        } absolute sm:hidden left-0 top-[60px] w-50 h-[89%] p-2 text-lg flex-col justify-between text-black border-r border-gray-200 dark:border-gray-700 shadow-2xl`}
+        } absolute sm:hidden left-0 top-[60px] w-50 h-[89%] p-2 text-lg flex-col justify-between text-black bg-gray-200 shadow-2xl z-50 opacity border-r border-gray-200 dark:border-gray-700`}
       >
         <main className="flex flex-col gap-4">
           {/* username/ information */}
@@ -127,7 +111,7 @@ const Header = () => {
           </div>
 
           {/* connect */}
-          <div>
+          {/* <div>
             <ul className="mt-4 space-y-2 ">
               <li className="border-b-2 border-b-gray-200">
                 <ToAndroid />
@@ -139,7 +123,7 @@ const Header = () => {
                 <ToPc />
               </li>
             </ul>
-          </div>
+          </div> */}
 
           {/* added feature from header fo mobile */}
           <section>
