@@ -73,13 +73,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen w-auto flex flex-col`}
       >
-        <Header />
-        <div className="relative flex flex-1 h-screen overflow-hidden">
-          <Section />
-          <main className="flex-1 overflow-auto">
-            <RootLayoutClient>{children}</RootLayoutClient>
-          </main>
-        </div>
+        <RootLayoutClient>
+          <Header />
+          <div className="relative flex flex-1 h-screen overflow-hidden">
+            <Section />
+            <main className="relative flex-1 overflow-auto">{children}</main>
+          </div>
+        </RootLayoutClient>
       </body>
     </html>
   );

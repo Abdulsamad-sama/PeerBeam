@@ -1,17 +1,21 @@
 "use client";
+import BackToHomeBtn from "@/components/backtohomebtn/BackToHomeBtn";
 import React from "react";
 
 const About = () => {
   return (
     <main className="relative overflow flex flex-col gap-8 items-center justify-center max-w-2xl mx-auto px-4 py-10 text-gray-800">
-      <h1 className="text-4xl font-bold mb-4">PeerBeam</h1>
+      <BackToHomeBtn />
+      <h1 className="text-4xl font-bold mb-4">
+        PeerBeam{" "}
+        <span className="italic text-xs text-gray-500">Version 1.0</span>
+      </h1>
       <p className="text-lg mb-6">
         ⚡ A blazing-fast, peer-to-peer file transfer web app powered by WebRTC,
         with zero internet dependency after initial connection. Just scan,
         connect, and share — all in your browser.
       </p>
       <hr className="my-6" />
-
       <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-2">🚀 Features</h2>
         <ul className="list-disc pl-6 space-y-1">

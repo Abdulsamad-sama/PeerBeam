@@ -42,7 +42,14 @@ const Section = () => {
         </div>
 
         {/* connect */}
-        <div>
+        <div className="mt-4">
+          <Link href="/connect" className="w-full bg-gray-800">
+            Connect
+          </Link>
+        </div>
+
+        {/* Coming Soon */}
+        {/* <div>
           <ul className="mt-4 space-y-2 ">
             <li className="border-b-2 border-b-gray-200">
               <ToAndroid />
@@ -54,7 +61,7 @@ const Section = () => {
               <ToPc />
             </li>
           </ul>
-        </div>
+        </div> */}
       </main>
 
       {/* Other information */}
