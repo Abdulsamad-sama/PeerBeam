@@ -1,28 +1,49 @@
+"use client";
 import React from "react";
 import BackToHomeBtn from "@/components/Backtohomebtn/BackToHomeBtn";
+import ChangeAvatar from "@/components/ChangeAvatar/ChangeAvatar";
 
 const settings = () => {
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+    <div className="relative flex flex-col h-full p-4 pt-8">
       <BackToHomeBtn />
-      <h1 className="text-2xl font-bold">Settings Page</h1>
-      <p>This is the settings page of the application.</p>
       <div>
-        <h2>Edit UserName</h2>
+        <h1 className="text-4xl text-center font-bold mb-4">
+          PeerBeam
+          <span className="italic text-xs text-gray-500">Version 1.0</span>
+        </h1>
       </div>
-      <div>
-        <h2>Edit avater</h2>
+      {/* <hr className=" " /> */}
+
+      <div className="mt-4">
+        <h2 className="text-sm italic">Edit your name</h2>
+        <div className="border-1 rounded h-19 p-2"></div>
       </div>
-      <div>
-        <h2>Theme</h2>
-        <p>Dark Mode</p>
-        <p>Light Mode</p>
+
+      {/* edit avatar */}
+      <div className="mt-4">
+        <h2 className="text-sm italic">Edit your avatar</h2>
+        <div className="border-1 rounded h-19 p-2">
+          <ChangeAvatar />
+        </div>
       </div>
-      <div>
-        <h2>Clear History</h2>
+
+      <div className="mt-4">
+        <h2 className="text-sm italic">Theme</h2>
+        <div className="border-1 rounded h-19 p-2">
+          <p>Dark Mode</p>
+          <p>Light Mode</p>
+        </div>
       </div>
-      <div>
-        <h3>version 1.0</h3>
+
+      <div className="text-right mt-4 ">
+        <button className=" border-1 rounded-2xl p-1.5 cursor-pointer bg-gray-200 hover:bg-gray-300 shadow">
+          Clear History
+        </button>
+      </div>
+
+      <div className="text-center italic text-xs text-gray-500 ">
+        <h3>Peerbeem: version 1.0</h3>
       </div>
     </div>
   );

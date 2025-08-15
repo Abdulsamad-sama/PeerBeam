@@ -12,7 +12,6 @@ import {
   FaUserPlus,
 } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
-import { ToAndroid, ToPc, ToiOS } from "../connectOptions/connectOptions";
 import Connected from "@/components/connected/connected";
 import { BsExclamationCircleFill } from "react-icons/bs";
 
@@ -111,19 +110,14 @@ const Header = () => {
           </div>
 
           {/* connect */}
-          {/* <div>
-            <ul className="mt-4 space-y-2 ">
-              <li className="border-b-2 border-b-gray-200">
-                <ToAndroid />
-              </li>
-              <li className="border-b-2 border-b-gray-200">
-                <ToiOS />
-              </li>
-              <li className="border-b-2 border-b-gray-200 ">
-                <ToPc />
-              </li>
-            </ul>
-          </div> */}
+          <div className="mt-4">
+            <Link
+              href="/connect"
+              className="flex items-center gap-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded"
+            >
+              Connects
+            </Link>
+          </div>
 
           {/* added feature from header fo mobile */}
           <section>

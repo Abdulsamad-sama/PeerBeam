@@ -5,12 +5,14 @@ async function cacheCoreAsset() {
   cache.addAll([
     "/",
     "/about",
-    "/ecosystem",
-
+    "/contact",
+    "/privacy",
+    "/connect",
     "/settings",
     "/connect",
     "/manifest.json",
     "/service-worker.js",
+    "/offline",
   ]);
 }
 

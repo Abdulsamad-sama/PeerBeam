@@ -4,6 +4,8 @@ import "./globals.css";
 import Header from "@/components/Header/Header";
 import Section from "@/components/Section/Section";
 import RootLayoutClient from "./RootLayoutClient";
+import { AvatarProvider } from "@/context/AvatarContext";
+import { NameProvider } from "@/context/NameContext";
 
 export const metadata: Metadata = {
   title: "PeerBeam",
@@ -74,11 +76,17 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen w-auto flex flex-col`}
       >
         <RootLayoutClient>
-          <Header />
-          <div className="relative flex flex-1 h-screen overflow-hidden">
-            <Section />
-            <main className="relative flex-1 overflow-auto">{children}</main>
-          </div>
+          <AvatarProvider>
+            <NameProvider>
+              <Header />
+              <div className="relative flex flex-1 h-screen overflow-hidden">
+                <Section />
+                <main className="relative flex-1 overflow-auto">
+                  {children}
+                </main>
+              </div>
+            </NameProvider>
+          </AvatarProvider>
         </RootLayoutClient>
       </body>
     </html>
