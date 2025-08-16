@@ -1,8 +1,8 @@
+"use";
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import Connected from "@/components/connected/connected";
-import Avatar from "../Avatar/Avatar";
+import UserAvatar from "@/components/UserAvatar/UserAvatar";
 import { useAvatar } from "@/context/AvatarContext";
 import { FaStar, FaUserCog, FaUserPlus } from "react-icons/fa";
 import { BsExclamationCircleFill } from "react-icons/bs";
@@ -15,7 +15,7 @@ const Section = () => {
         {/* username/ information */}
         <header className="flex flex-col justify-center items-center border-b-2 border-gray-500 dark:border-gray-700 pb-2">
           <div className="flex justify-center gap-2">
-            <Avatar />
+            <UserAvatar />
             <h1>Username</h1>
           </div>
           <Connected />

@@ -1,6 +1,8 @@
 "use client";
-import React, { createContext, useContext, useState } from "react";
 
+// NameContext.tsx
+// This context manages the user name state for the application
+import React, { createContext, useContext, useState } from "react";
 const DEFAULT_NAME = "Username";
 
 type NameContextType = {

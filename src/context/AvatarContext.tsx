@@ -1,7 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
-
+// AvatarContext.tsx
+// This context manages the avatar state for the application
+import React, { createContext, useContext, useState, ReactNode } from "react";
 const DEFAULT_AVATAR = "/user2.png";
 
 type AvatarContextType = {
@@ -14,7 +15,7 @@ const AvatarContext = createContext<AvatarContextType>({
   setAvatar: () => {},
 });
 
-export const AvatarProvider = ({ children }: { children: React.ReactNode }) => {
+export const AvatarProvider = ({ children }: { children: ReactNode }) => {
   const [avatar, setAvatar] = useState<string>(DEFAULT_AVATAR);
   return (
     <AvatarContext.Provider value={{ avatar, setAvatar }}>

@@ -1,7 +1,7 @@
 "use client";
 import { useAvatar } from "@/context/AvatarContext";
 import Image from "next/image";
-const Avatar = () => {
+const UserAvatar = () => {
   const { avatar } = useAvatar();
 
   return (
@@ -15,4 +15,4 @@ const Avatar = () => {
   );
 };
 
-export default Avatar;
+export default UserAvatar;

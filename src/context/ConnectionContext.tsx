@@ -1,3 +1,8 @@
+"use client";
+
+// ConnectionContext.tsx
+// This context manages the connection state for the application
+
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
 type ConnectionContextType = {

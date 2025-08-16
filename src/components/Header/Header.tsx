@@ -52,20 +52,15 @@ const Header = () => {
             <Link href="/ecosystem">Ecosystem</Link>
           </li>
         </ul>
-        {/* stays constant both in mobile and desktop view */}
-        {/* button to show connect options */}
-        <div className="relative cursor-pointer hover:underline underline-offset-4">
-          <button
-            type="button"
-            className="border-none prim-color text-lg  flex items-center gap-2"
-            onClick={() => setIsConnectOpen((prev) => !prev)}
-          >
-            Connect
-            {isConnectOpen ? <FaCaretUp /> : <FaCaretDown />}
-          </button>
 
-          {/* hidden connect menu*/}
-          {/*  */}
+        {/* connect button */}
+        <div className="mt-4">
+          <Link
+            href="/connect"
+            className="flex items-center gap-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded"
+          >
+            Connects
+          </Link>
         </div>
       </nav>
 

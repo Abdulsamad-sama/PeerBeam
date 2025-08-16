@@ -2,6 +2,7 @@
 import React from "react";
 import BackToHomeBtn from "@/components/Backtohomebtn/BackToHomeBtn";
 import ChangeAvatar from "@/components/ChangeAvatar/ChangeAvatar";
+import ChangeUserName from "@/components/ChangeUserName/ChangeUserName";
 
 const settings = () => {
   return (
@@ -17,7 +18,9 @@ const settings = () => {
 
       <div className="mt-4">
         <h2 className="text-sm italic">Edit your name</h2>
-        <div className="border-1 rounded h-19 p-2"></div>
+        <div className="border-1 rounded h-19 p-2">
+          <ChangeUserName />
+        </div>
       </div>
 
       {/* edit avatar */}
@@ -29,10 +32,17 @@ const settings = () => {
       </div>
 
       <div className="mt-4">
-        <h2 className="text-sm italic">Theme</h2>
+        <h2 className="text-sm italic">Choose your Theme</h2>
         <div className="border-1 rounded h-19 p-2">
-          <p>Dark Mode</p>
-          <p>Light Mode</p>
+          <button>
+            <p className="text-center">Dark Mode</p>
+          </button>
+          <button>
+            <p className="text-center">Light Mode</p>
+          </button>
+          <button>
+            <p className="text-center">System Default</p>
+          </button>
         </div>
       </div>
 
