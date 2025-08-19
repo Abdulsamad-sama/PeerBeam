@@ -3,15 +3,15 @@ const CACHE_NAME = "my-cache-v1";
 async function cacheCoreAsset() {
   const cache = await caches.open(CACHE_NAME);
   cache.addAll([
-    "/",
-    "/about",
-    "/contact",
-    "/privacy",
-    "/connect",
-    "/settings",
-    "/connect",
-    "/manifest.json",
-    "/service-worker.js",
+    // "/",
+    // "/about",
+    // "/contact",
+    // "/privacy",
+    // "//connect",
+    // "/settings",
+    // "/connect",
+    // "/manifest.json",
+    // "/service-worker.js",
     "/offline",
   ]);
 }
@@ -72,17 +72,12 @@ async function cacheFirstStrategy(request) {
   }
 }
 
-// <h2 className="text-2xl font-semibold mb-2">📄 License</h2>
-// <p className="text-gray-600">
-//   This project is a work in progress. The goal is to create a PWA for
-//   seamless file transfers between devices.</p>
-
 self.addEventListener("fetch", (event) => {
   const { request } = event;
   if (event.request.mode === "navigate") {
-    event.respondWith(cacheFirstStrategy(request));
-  } else {
     event.respondWith(dynamicCaching(request));
+  } else {
+    event.respondWith(cacheFirstStrategy(request));
   }
   console.log("Fetching:", event.request.url);
 });

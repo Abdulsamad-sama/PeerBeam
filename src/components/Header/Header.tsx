@@ -14,6 +14,8 @@ import {
 import { IoClose } from "react-icons/io5";
 import Connected from "@/components/connected/connected";
 import { BsExclamationCircleFill } from "react-icons/bs";
+import UserAvatar from "@/components/UserAvatar/UserAvatar";
+import UserName from "@/components/UserName/UserName";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -76,9 +78,9 @@ const Header = () => {
         <main className="flex flex-col gap-4">
           {/* username/ information */}
           <header className="flex flex-col justify-center items-center border-b-2 border-gray-500 dark:border-gray-700 pb-2">
-            <div className="flex justify-around">
-              <FaRegUserCircle className="text-3xl" />
-              <h1>Username</h1>
+            <div className="flex justify-center gap-2">
+              <UserAvatar />
+              <UserName />
             </div>
             <Connected />
           </header>
@@ -113,18 +115,6 @@ const Header = () => {
               Connects
             </Link>
           </div>
-
-          {/* added feature from header fo mobile */}
-          <section>
-            <ul className="mt-4 space-y-4">
-              <li className="border-b-2 border-b-gray-200">
-                <Link href="/">History</Link>
-              </li>
-              <li className="border-b-2 border-b-gray-200">
-                <Link href="/ecosystem">Ecosystem</Link>
-              </li>
-            </ul>
-          </section>
         </main>
 
         {/* Other information */}

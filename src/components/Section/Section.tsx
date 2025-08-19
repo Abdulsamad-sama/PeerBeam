@@ -1,22 +1,21 @@
-"use";
+"use clent";
 import React from "react";
 import Link from "next/link";
 import Connected from "@/components/connected/connected";
 import UserAvatar from "@/components/UserAvatar/UserAvatar";
-import { useAvatar } from "@/context/AvatarContext";
+import UserName from "@/components/UserName/UserName";
 import { FaStar, FaUserCog, FaUserPlus } from "react-icons/fa";
 import { BsExclamationCircleFill } from "react-icons/bs";
 
 const Section = () => {
-  const { avatar } = useAvatar();
   return (
-    <section className="relative hidden sm:flex flex-col justify-between h-full w-60 p-2 overflow-hidden  text-lg border-r border-gray-200 dark:border-gray-700">
+    <section className="relative hidden sm:flex flex-col justify-between h-full w-60 p-2 overflow-hidden  text-lg border-r border-gray-200 dark:border-gray-600 dark:bg-gray-900">
       <main className="flex flex-col gap-4">
         {/* username/ information */}
         <header className="flex flex-col justify-center items-center border-b-2 border-gray-500 dark:border-gray-700 pb-2">
           <div className="flex justify-center gap-2">
             <UserAvatar />
-            <h1>Username</h1>
+            <UserName />
           </div>
           <Connected />
         </header>

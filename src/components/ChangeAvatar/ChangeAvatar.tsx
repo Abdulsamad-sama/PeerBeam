@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useAvatar } from "@/context/AvatarContext";
+import { FaPlus } from "react-icons/fa6";
 
 const ChangeAvatar = () => {
   const { avatar, setAvatar } = useAvatar();
@@ -27,13 +28,20 @@ const ChangeAvatar = () => {
           className="mt-2 mr-6 w-15 h-15 rounded-full object-cover border"
         />
       )}
-      <input
-        type="file"
-        accept="image/*"
-        aria-label="user avatar"
-        onChange={handleAvatarChange}
-        className="border-2 cursor-pointer"
-      />
+
+      <div className=" relative overflow-hidden flex items-center gap-4 h-10 p-4 border rounded border-gray-500 cursor-pointer">
+        <input
+          type="file"
+          accept="image/*"
+          aria-label="user avatar"
+          onChange={handleAvatarChange}
+          className="absolute opacity-0"
+        />
+        <div className=" flex items-center">
+          <FaPlus className="mr-1" />
+          <p className="cursor-pointer ">Choose from files</p>
+        </div>
+      </div>
     </div>
   );
 };

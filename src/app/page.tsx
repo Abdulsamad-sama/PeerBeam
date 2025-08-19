@@ -18,7 +18,7 @@ export default function Home() {
 
   return (
     <div
-      className=" relative flex flex-col gap-8 items-center justify-center h-full"
+      className=" relative flex flex-col gap-8 items-center justify-center h-full dark:bg-gray-900"
       onDragOver={(e) => {
         e.preventDefault();
         e.currentTarget.classList.add("border-blue-500");
@@ -57,7 +57,7 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="overflow-hidden flex items-center gap-4 h-10 p-4 border border-gray-500">
+      <div className=" relative overflow-hidden flex items-center gap-4 h-10 p-4 border border-gray-500 cursor-pointer">
         <input
           className="absolute opacity-0 border-2"
           type="file"
