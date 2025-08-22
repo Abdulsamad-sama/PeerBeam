@@ -10,11 +10,17 @@ const page = () => {
   const { isConnected, setIsConnected } = useConnection();
   const [isQRCode, setIsQRCode] = useState(true);
   const [roomId, setRoomId] = useState<string>();
+
   // Create a socket connection
   const socket = io("http://localhost:3001");
 
-  // handling generation of manual code
+  // Initial connection status
+  socket.on("initial-connection", (data) => {
+    console.log("Connection status:", data.isConnected);
+    setIsConnected(data.isConnected);
+  });
 
+  // Generation of manual code
   const GenerateId = () => {
     let id =
       Math.trunc(Math.random() * 999) +
@@ -25,17 +31,14 @@ const page = () => {
 
     return id;
   };
-  const handleGenerateCode = (e: React.MouseEvent<HTMLButtonElement>) => {
+
+  // Handling room creation
+  const handleCreateRoom = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const newRoomId: string = GenerateId();
     setRoomId(newRoomId);
     socket.emit("sender-join", { uid: newRoomId });
   };
-
-  socket.on("initial-connection", (data) => {
-    console.log("Connection status:", data.isConnected);
-    setIsConnected(data.isConnected);
-  });
 
   return (
     <div className="h-full">
@@ -70,7 +73,7 @@ const page = () => {
         </p>
 
         <button
-          onClick={handleGenerateCode}
+          onClick={handleCreateRoom}
           className="border-2 p-2 rounded-2xl cursor-pointer bg1-color hover:bg-[#00ca79] hover:text-white active:text-amber-300 active:bg-[#00ca7985] transition-colors duration-300"
         >
           Generate code
