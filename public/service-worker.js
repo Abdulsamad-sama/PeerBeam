@@ -2,18 +2,18 @@ const CACHE_NAME = "my-cache-v1";
 
 async function cacheCoreAsset() {
   const cache = await caches.open(CACHE_NAME);
-  cache.addAll([
-    // "/",
-    // "/about",
-    // "/contact",
-    // "/privacy",
-    // "//connect",
-    // "/settings",
-    // "/connect",
-    // "/manifest.json",
-    // "/service-worker.js",
-    "/offline",
-  ]);
+  // cache.addAll([
+  //   // "/",
+  //   // "/about",
+  //   // "/contact",
+  //   // "/privacy",
+  //   // "//connect",
+  //   // "/settings",
+  //   // "/connect",
+  //   // "/manifest.json",
+  //   // "/service-worker.js",
+  //   "/offline",
+  // ]);
 }
 
 self.addEventListener("install", (event) => {
@@ -72,12 +72,12 @@ async function cacheFirstStrategy(request) {
   }
 }
 
-self.addEventListener("fetch", (event) => {
-  const { request } = event;
-  if (event.request.mode === "navigate") {
-    event.respondWith(dynamicCaching(request));
-  } else {
-    event.respondWith(cacheFirstStrategy(request));
-  }
-  console.log("Fetching:", event.request.url);
-});
+// self.addEventListener("fetch", (event) => {
+//   const { request } = event;
+//   if (event.request.mode === "navigate") {
+//     event.respondWith(dynamicCaching(request));
+//   } else {
+//     event.respondWith(cacheFirstStrategy(request));
+//   }
+//   console.log("Fetching:", event.request.url);
+// });

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import BackToHomeBtn from "@/components/Backtohomebtn/BackToHomeBtn";
+import BackToHomeBtn from "@/components/BackBtn/BackBtn";
 import ChangeAvatar from "@/components/ChangeAvatar/ChangeAvatar";
 import ChangeUserName from "@/components/ChangeUserName/ChangeUserName";
 import ThemeBtn from "@/components/ThemeBtn/ThemeBtn";

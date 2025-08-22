@@ -1,5 +1,5 @@
 "use client";
-import BackToHomeBtn from "@/components/Backtohomebtn/BackToHomeBtn";
+import BackToHomeBtn from "@/components/BackBtn/BackBtn";
 import React from "react";
 
 const About = () => {

@@ -3,9 +3,10 @@
 
 import React from "react";
 import { useState } from "react";
+import { useConnection } from "@/context/ConnectionContext";
 
 const connected = () => {
-  const [isConnected, setIsConnected] = useState(true);
+  const { isConnected } = useConnection();
   return (
     <div
       className={`flex items-center gap-1 w-fit text-lg ${

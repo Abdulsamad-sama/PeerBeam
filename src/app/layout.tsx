@@ -7,6 +7,7 @@ import RootLayoutClient from "./RootLayoutClient";
 import { AvatarProvider } from "@/context/AvatarContext";
 import { NameProvider } from "@/context/NameContext";
 import ThemeProvider from "@/context/ThemeContext";
+import { ConnectionProvider } from "@/context/ConnectionContext";
 
 export const metadata: Metadata = {
   title: "PeerBeam",
@@ -80,13 +81,15 @@ export default function RootLayout({
           <AvatarProvider>
             <NameProvider>
               <ThemeProvider>
-                <Header />
-                <div className="relative flex flex-1 h-screen overflow-hidden">
-                  <Section />
-                  <main className="relative flex-1 overflow-auto">
-                    {children}
-                  </main>
-                </div>
+                <ConnectionProvider>
+                  <Header />
+                  <div className="relative flex flex-1 h-screen overflow-hidden">
+                    <Section />
+                    <main className="relative flex-1 overflow-auto">
+                      {children}
+                    </main>
+                  </div>
+                </ConnectionProvider>
               </ThemeProvider>
             </NameProvider>
           </AvatarProvider>
