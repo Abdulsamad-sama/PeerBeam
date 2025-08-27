@@ -1,51 +1,89 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useConnection } from "@/context/ConnectionContext";
 import BackBtn from "@/components/BackBtn/BackBtn";
 import { io } from "socket.io-client";
+import { useRouter } from "next/navigation";
+import { join } from "path";
 
 const Page = () => {
   // Separate input state from received sender ID
   const [inputSenderId, setInputSenderId] = useState("");
-  const [receivedSenderId, setReceivedSenderId] = useState("");
-  const { setIsConnected } = useConnection();
-  const [socket, setSocket] = useState<ReturnType<typeof io> | null>(null);
 
-  React.useEffect(() => {
+  const { isConnected, setIsConnected } = useConnection();
+  const [socket, setSocket] = useState<ReturnType<typeof io> | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
     const newSocket = io("http://localhost:3001");
 
-    newSocket.on("initial-connection", (data) => {
-      console.log("Connection status:", data.isConnected);
+    newSocket.on("connection-status", (data) => {
       setIsConnected(data.isConnected);
+      console.log("connection status:", data.isConnected);
     });
 
-    newSocket.on("sender-join", (data) => {
-      console.log("Sender ID:", data.uid);
-      setReceivedSenderId(data.uid); // Don't overwrite input field
-    });
+    // newSocket.on("receiver-join", (data) => {
+    //   console.log("Sender ID:", data.uid);
+    //   setReceivedSenderId(data.uid); // Don't overwrite input field
+    // });
+
+    // Connection established, navigate to /page/[id]
+    // newSocket.on("init", (sender_uid) => {
+    //   router.push(`/page/${sender_uid}`);
+    // });
 
     setSocket(newSocket);
 
     return () => {
+      newSocket.off("connection-status");
       newSocket.disconnect();
     };
-  }, [setIsConnected]);
+
+    // Cleanup on unmount
+  }, []);
+
+  const generateId = () => {
+    return (
+      Math.trunc(Math.random() * 999) +
+      "-" +
+      Math.trunc(Math.random() * 999) +
+      "-" +
+      Math.trunc(Math.random() * 999)
+    );
+  };
 
   // Function to handle connection
   const handleConnect = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (inputSenderId && socket) {
-      socket.emit("receiver-join", { uid: inputSenderId });
-    } else {
-      alert("Please enter a valid sender ID.");
+
+    if (!socket) {
+      alert("Socket connection not established. Please try again.");
+      return;
     }
+
+    if (!inputSenderId) {
+      alert("Please enter a valid sender ID.");
+      return;
+    }
+
+    const join_Id = generateId();
+
+    // Emit the receiver-join event with the generated ID and input sender ID
+    socket.emit("receiver-join", {
+      uid: join_Id,
+      sender_uid: inputSenderId,
+    });
+    console.log("isConnected:", isConnected);
+    console.log(
+      `Receiver joined with ID: ${join_Id}, connecting to sender: ${inputSenderId}`
+    );
   };
 
   return (
-    <div className="h-full flex flex-col items-center justify-center p-4">
+    <div className=" relative h-full flex flex-col items-center justify-center p-4">
       <BackBtn />
 
-      <form onSubmit={handleConnect} className="">
+      <form onSubmit={handleConnect} className=" flex flex-col items-center">
         <input
           type="text"
           placeholder="Input sender id"
@@ -64,10 +102,10 @@ const Page = () => {
       </form>
       <hr className="my-6" />
       <span>
-        <p>Input sender-id to connect</p>
-        {receivedSenderId && (
+        <p>Input sender's ID to connect</p>
+        {inputSenderId && (
           <p className="text-xs text-gray-500 mt-2">
-            Connected to sender: {receivedSenderId}
+            Connected to sender: {inputSenderId}
           </p>
         )}
       </span>

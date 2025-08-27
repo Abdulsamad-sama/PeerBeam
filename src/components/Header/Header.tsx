@@ -44,7 +44,7 @@ const Header = () => {
       </div>
       <h1 className="text-3xl font-bold">My-Ecosystem</h1>
 
-      <nav className="flex items-right text-right justify-between gap-x-4">
+      <nav className="flex items-right justify-between gap-x-4">
         {/* shows when in desktop mode */}
         <ul className=" hidden sm:flex items-center space-x-4">
           <li>
@@ -56,12 +56,12 @@ const Header = () => {
         </ul>
 
         {/* connect button */}
-        <div className="mt-4">
+        <div className="">
           <Link
             href="/connect"
-            className="flex items-center gap-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded"
+            className="cursor-pointer bg-gray-200 text-gray-800 p-1 hover:text-gray-200 hover:outline-gray-800 dark:hover:bg-gray-800 rounded"
           >
-            Connects
+            Connect
           </Link>
         </div>
       </nav>

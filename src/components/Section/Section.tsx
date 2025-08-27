@@ -20,35 +20,23 @@ const Section = () => {
           <Connected />
         </header>
 
-        {/* files */}
-        <div className="hidden">
-          <ul className="mt-4 space-y-2">
-            <li>
-              <Link href="/">Home</Link>
-            </li>
-            <li>
-              <Link href="/videos">Videos</Link>
-            </li>
-            <li>
-              <Link href="/pictures">Pictures</Link>
-            </li>
-            <li>
-              <Link href="/documents">Document</Link>
-            </li>
-            <li>
-              <Link href="/audio">Audio</Link>
-            </li>
-          </ul>
-        </div>
-
         {/* connect */}
         <div className="mt-4">
-          <Link
-            href="/connect"
-            className="flex items-center gap-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded"
-          >
-            Connects
-          </Link>
+          <nav>
+            <ul>
+              <li>
+                <Link href="/">Home</Link>
+              </li>
+              <li>
+                <Link
+                  href="/connect"
+                  className="cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 rounded"
+                >
+                  Connect
+                </Link>
+              </li>
+            </ul>
+          </nav>
         </div>
       </main>
 

@@ -9,11 +9,11 @@ const BackBtn = () => {
     <button
       type="button"
       onClick={() => router.back()}
-      className="absolute top-8 left-2 text-black rounded-full bg-gray-200 hover:bg-gray-300 p-2 flex items-center gap-2 shadow"
+      className="absolute top-2 md:top-8 left-2 text-black rounded-full bg-gray-200 hover:bg-gray-300 p-2 flex items-center gap-2 shadow"
       aria-label="Back to Home"
     >
       <FaCaretLeft className="text-xl" />
-      <span className="font-semibold">Home</span>
+      <span className="font-semibold">Back</span>
     </button>
   );
 };

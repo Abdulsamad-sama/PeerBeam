@@ -1,25 +1,32 @@
 import express from "express";
 import { createServer } from "http";
-import path from "path";
-import { fileURLToPath } from "url";
 import { Server as SocketIOServer } from "socket.io";
 
 const app = express();
 const httpServer = createServer(app);
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-console.log(__dirname);
-
-const io = new SocketIOServer(httpServer);
+const io = new SocketIOServer(httpServer, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
 
 io.on("connection", (socket) => {
+  socket.emit("connection-status", {
+    isConnected: true,
+  });
+  socket.on("disconnect", () => {
+    socket.emit("connection-status", { isConnected: false });
+  });
+
   socket.on("sender-join", (data) => {
     socket.join(data.uid);
   });
   socket.on("receiver-join", (data) => {
     socket.join(data.uid);
-    socket.to(data.sender_uid).emit("init", data.uid);
+    socket.in(data.sender_uid).emit("init", data.uid);
   });
   socket.on("file-meta", (data) => {
     socket.in(data.uid).emit("file-meta", data.metadata);
@@ -32,4 +39,6 @@ io.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(3001);
+httpServer.listen(3001, () => {
+  console.log("Server is running on port 3001");
+});
