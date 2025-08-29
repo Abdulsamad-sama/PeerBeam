@@ -61,14 +61,16 @@ const Page = () => {
   };
 
   return (
-    <div className="relative flex flex-col items-center justify-center h-full p-4">
+    <div className="relative flex flex-col text-center h-full p-4 pt-8">
       <BackBtn />
-      <h1 className="text-3xl font-bold mt-4">Connect to Receiver</h1>
+      <h1 className="text-3xl text-center font-bold mt-4">
+        Connect to Receiver
+      </h1>
 
       {/* QR Code section */}
       {isQRCode ? (
         <div className="p-4">
-          <div className="flex items-center justify-center text-center">
+          <div className="flex items-center justify-center">
             <QRCode
               value={roomId ? roomId : "couldnt connect"}
               className=" h-36 w-36"
@@ -76,7 +78,7 @@ const Page = () => {
           </div>
           <hr className="my-4" />
           <span>
-            <p className="text-lg md:mb-4">
+            <p className="text-lg text-center md:mb-4">
               Connect to another device by scanning the QR code or entering the
               code manually.
             </p>

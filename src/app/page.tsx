@@ -1,20 +1,76 @@
 "use client";
-import Image from "next/image";
+
 import { FaCaretRight, FaPlus } from "react-icons/fa6";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { io, Socket } from "socket.io-client";
 
 export default function Home() {
   const [files, setFiles] = useState<File[]>([]);
+  const [progress, setProgress] = useState(0);
+  const [socket, setSocket] = useState<Socket | null>(null);
 
-  const handleFile = (fileList: FileList) => {
+  // Initialize socket connection
+  useEffect(() => {
+    const newSocket = io("http://localhost:3001");
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []);
+
+  const handleFileChange = (fileList: FileList) => {
     const selectedFiles = Array.from(fileList);
     if (selectedFiles.length > 0) {
       setFiles(selectedFiles);
-      alert(`Selected ${selectedFiles.length} file(s)`);
+      console.log(selectedFiles);
     } else {
       alert("No files selected");
     }
   };
+
+  // Send file metadata and chunks
+  // const sendFile = () => {
+  //   if (!files || !socket) return;
+
+  //   const metadata = {
+  //     name: files.name,
+  //     size: files.size,
+  //   };
+
+  //   // Emit file metadata
+  //   socket.emit("file-meta", { uid: roomId, metadata });
+
+  //   const chunkSize = 1024 * 64; // 64KB
+  //   const reader = new FileReader();
+  //   let offset = 0;
+
+  //   // Read and send file chunks
+  //   reader.onload = (event) => {
+  //     if (event.target?.result && socket) {
+  //       socket.emit("file-raw", {
+  //         uid: roomId,
+  //         buffer: event.target.result,
+  //       });
+
+  //       offset += chunkSize;
+  //       setProgress(Math.min((offset / file.size) * 100, 100));
+
+  //       if (offset < file.size) {
+  //         readNextChunk();
+  //       }
+  //     }
+  //   };
+
+  //   const readNextChunk = () => {
+  //     const slice = file.slice(offset, offset + chunkSize);
+  //     reader.readAsArrayBuffer(slice);
+  //   };
+
+  //   // Start reading the first chunk
+  //   socket.emit("file-start", { uid: roomId });
+  //   readNextChunk();
+  // };
 
   return (
     <div
@@ -30,7 +86,7 @@ export default function Home() {
       onDrop={(e) => {
         e.preventDefault();
         e.currentTarget.classList.remove("border-blue-500");
-        handleFile(e.dataTransfer.files);
+        handleFileChange(e.dataTransfer.files);
       }}
     >
       {/* Show how many file is selected*/}
@@ -64,7 +120,7 @@ export default function Home() {
           multiple
           onChange={(e) => {
             if (e.target.files) {
-              handleFile(e.target.files);
+              handleFileChange(e.target.files);
             }
           }}
         />
