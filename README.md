@@ -1,12 +1,12 @@
 # PeerBeam
 
-⚡ A blazing-fast, peer-to-peer file transfer web app powered by WebRTC, with zero internet dependency after initial connection. Just scan, connect, and share — all in your browser.
+⚡ A blazing-fast, peer-to-peer file transfer web app powered by socket.io, with zero internet dependency after initial connection. Just scan, connect, and share — all in your browser.
 
 ---
 
 ## 🚀 Features
 
-- 📡 **Peer-to-peer file sharing** over local network using WebRTC
+- 📡 **Peer-to-peer file sharing** over local network using socket.io
 - 📱 **Progressive Web App (PWA)** — install it like a native app
 - 🌐 **Minimal signaling server** for WebRTC connection bootstrapping
 - 📷 **QR Code-based pairing** for fast & easy device discovery
@@ -32,6 +32,21 @@
 
 ---
 
+### Architecture Overview
+
+code
++----------------+ Socket.IO (signaling) +----------------+
+| Sender Peer | <-------------------------------------> | Receiver Peer |
++----------------+ +----------------+
+| |
+| WebRTC PeerConnection (P2P channel via local IP) |
++----------------------------------------------------------+
+| Direct Data Transfer (chunks) |
++----------------------------------------------------------+
+code
+
+---
+
 ## 📦 Installation (Coming Soon)
 
 > _Note: The project is currently under development._
@@ -50,7 +65,7 @@ Planned steps:
 - [x] Project setup
 - [x] File transfer UI/UX
 - [x] PWA implementation
-- [ ] Backend signaling server
+- [x] Backend signaling server
 - [ ] QR-based pairing
 - [ ] WebRTC data channel logic
 - [ ] Local discovery over LAN

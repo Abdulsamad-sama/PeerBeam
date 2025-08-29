@@ -8,6 +8,7 @@ export default function Home() {
   const [files, setFiles] = useState<File[]>([]);
   const [progress, setProgress] = useState(0);
   const [socket, setSocket] = useState<Socket | null>(null);
+  const roomId = "some-unique-room-id"; // This should be generated or fetched as needed
 
   // Initialize socket connection
   useEffect(() => {
@@ -20,61 +21,81 @@ export default function Home() {
   }, []);
 
   const handleFileChange = (fileList: FileList) => {
-    const selectedFiles = Array.from(fileList);
-    if (selectedFiles.length > 0) {
-      setFiles(selectedFiles);
-      console.log(selectedFiles);
-    } else {
-      alert("No files selected");
-    }
+    const newFiles = Array.from(fileList);
+    // setFiles((prevFiles) => {
+    //   // Filter out duplicates based on name and size
+    //   const existing = new Map(prevFiles.map(file => [file.name + file.size, file]));
+    //   newFiles.forEach(file => existing.set(file.name + file.size, file));
+    //   return Array.from(existing.values());
+    // });
+
+    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
   };
+  console.log("Files after update:", files);
 
-  // Send file metadata and chunks
-  // const sendFile = () => {
-  //   if (!files || !socket) return;
+  //Send file metadata and chunks
+  const sendFile = () => {
+    if (!files || !socket || files.length === 0) return;
 
-  //   const metadata = {
-  //     name: files.name,
-  //     size: files.size,
-  //   };
+    const chunkSize = 1024 * 64; // 64KB
+    let fileIndex = 0;
+    let offset = 0;
+    const reader = new FileReader();
 
-  //   // Emit file metadata
-  //   socket.emit("file-meta", { uid: roomId, metadata });
+    const sendNextFile = () => {
+      if (fileIndex >= files.length) {
+        console.log("All files sent");
+        return;
+      }
 
-  //   const chunkSize = 1024 * 64; // 64KB
-  //   const reader = new FileReader();
-  //   let offset = 0;
+      const file = files[fileIndex];
+      offset = 0;
 
-  //   // Read and send file chunks
-  //   reader.onload = (event) => {
-  //     if (event.target?.result && socket) {
-  //       socket.emit("file-raw", {
-  //         uid: roomId,
-  //         buffer: event.target.result,
-  //       });
+      const metadata = {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+      };
 
-  //       offset += chunkSize;
-  //       setProgress(Math.min((offset / file.size) * 100, 100));
+      socket.emit("file-meta", { uid: roomId, metadata });
 
-  //       if (offset < file.size) {
-  //         readNextChunk();
-  //       }
-  //     }
-  //   };
+      socket.emit("file-start", { uid: roomId });
 
-  //   const readNextChunk = () => {
-  //     const slice = file.slice(offset, offset + chunkSize);
-  //     reader.readAsArrayBuffer(slice);
-  //   };
+      const readNextChunk = () => {
+        const slice = file.slice(offset, offset + chunkSize);
+        reader.readAsArrayBuffer(slice);
+      };
 
-  //   // Start reading the first chunk
-  //   socket.emit("file-start", { uid: roomId });
-  //   readNextChunk();
-  // };
+      reader.onload = (event) => {
+        if (event.target?.result && socket) {
+          socket.emit("file-raw", {
+            uid: roomId,
+            buffer: event.target.result,
+          });
+
+          offset += chunkSize;
+          setProgress(Math.min((offset / file.size) * 100, 100));
+
+          if (offset < file.size) {
+            readNextChunk();
+          } else {
+            // File finished, move to the next
+            fileIndex++;
+            sendNextFile();
+          }
+        }
+      };
+
+      // Start reading first chunk
+      readNextChunk();
+    };
+
+    sendNextFile();
+  };
 
   return (
     <div
-      className=" relative flex flex-col gap-8 items-center justify-center h-full dark:bg-gray-900"
+      className="relative flex flex-col gap-8 items-center justify-center h-full dark:bg-gray-900"
       onDragOver={(e) => {
         e.preventDefault();
         e.currentTarget.classList.add("border-blue-500");
@@ -115,12 +136,13 @@ export default function Home() {
 
       <div className=" relative overflow-hidden flex items-center gap-4 h-10 p-4 border border-gray-500 cursor-pointer">
         <input
-          className="absolute opacity-0 border-2"
+          className="absolute opacity-0 inset-0 cursor-pointer"
           type="file"
           multiple
           onChange={(e) => {
             if (e.target.files) {
               handleFileChange(e.target.files);
+              e.target.value = "";
             }
           }}
         />
