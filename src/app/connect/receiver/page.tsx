@@ -4,22 +4,22 @@ import { useConnection } from "@/context/ConnectionContext";
 import BackBtn from "@/components/BackBtn/BackBtn";
 import { io } from "socket.io-client";
 import { useRouter } from "next/navigation";
-import { join } from "path";
 
 const Page = () => {
   // Separate input state from received sender ID
   const [inputSenderId, setInputSenderId] = useState("");
-
-  const { isConnected, setIsConnected } = useConnection();
+  const { isConnected, setIsConnected, setRoomId, roomId } = useConnection();
   const [socket, setSocket] = useState<ReturnType<typeof io> | null>(null);
   const router = useRouter();
 
+  console.log(isConnected);
   useEffect(() => {
     const newSocket = io("http://localhost:3001");
 
     newSocket.on("connection-status", (data) => {
       setIsConnected(data.isConnected);
       console.log("connection status:", data.isConnected);
+      console.log("isconnection status:", isConnected);
     });
 
     // newSocket.on("receiver-join", (data) => {
@@ -66,17 +66,25 @@ const Page = () => {
       return;
     }
 
-    const join_Id = generateId();
+    const receiver_Id = generateId();
 
     // Emit the receiver-join event with the generated ID and input sender ID
     socket.emit("receiver-join", {
-      uid: join_Id,
+      uid: receiver_Id,
       sender_uid: inputSenderId,
     });
     console.log("isConnected:", isConnected);
     console.log(
-      `Receiver joined with ID: ${join_Id}, connecting to sender: ${inputSenderId}`
+      `Receiver joined with ID: ${receiver_Id}, connecting to sender: ${inputSenderId}`
     );
+
+    //set roomId to inputSenderId
+    if (isConnected == true) {
+      setRoomId(inputSenderId);
+    }
+    console.log(roomId);
+
+    // Navigate to the new page with the sender ID
   };
 
   return (

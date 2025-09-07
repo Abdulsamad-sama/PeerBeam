@@ -50,9 +50,6 @@ const Header = () => {
           <li>
             <Link href="/">History</Link>
           </li>
-          <li>
-            <Link href="/ecosystem">Ecosystem</Link>
-          </li>
         </ul>
 
         {/* connect button */}

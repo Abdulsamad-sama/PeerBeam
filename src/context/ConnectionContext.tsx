@@ -7,7 +7,9 @@ import React, { createContext, useState, useContext, ReactNode } from "react";
 
 type ConnectionContextType = {
   isConnected: boolean;
-  setIsConnected: (connected: boolean) => void;
+  roomId: string;
+  setRoomId: (id: string) => void;
+  setIsConnected: (isConnected: boolean) => void;
 };
 
 const ConnectionContext = createContext<ConnectionContextType | undefined>(
@@ -16,9 +18,12 @@ const ConnectionContext = createContext<ConnectionContextType | undefined>(
 
 export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
   const [isConnected, setIsConnected] = useState(false);
+  const [roomId, setRoomId] = useState("");
 
   return (
-    <ConnectionContext.Provider value={{ isConnected, setIsConnected }}>
+    <ConnectionContext.Provider
+      value={{ isConnected, setIsConnected, roomId, setRoomId }}
+    >
       {children}
     </ConnectionContext.Provider>
   );

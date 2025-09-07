@@ -1,19 +1,28 @@
 "use client";
 
-import { FaCaretRight, FaPlus } from "react-icons/fa6";
 import React, { useState, useEffect } from "react";
+import { FaCaretRight, FaPlus } from "react-icons/fa6";
 import { io, Socket } from "socket.io-client";
+import { useConnection } from "@/context/ConnectionContext";
 
 export default function Home() {
   const [files, setFiles] = useState<File[]>([]);
   const [progress, setProgress] = useState(0);
   const [socket, setSocket] = useState<Socket | null>(null);
-  const roomId = "some-unique-room-id"; // This should be generated or fetched as needed
+  // const { roomId } = useConnection();
+  const [roomId, setRoomId] = useState("");
+
+  console.log("Current Room ID:", roomId);
 
   // Initialize socket connection
   useEffect(() => {
     const newSocket = io("http://localhost:3001");
     setSocket(newSocket);
+
+    newSocket.on("init", (sender_uid) => {
+      setRoomId(sender_uid);
+      console.log(roomId);
+    });
 
     return () => {
       newSocket.disconnect();
@@ -31,7 +40,7 @@ export default function Home() {
 
     setFiles((prevFiles) => [...prevFiles, ...newFiles]);
   };
-  console.log("Files after update:", files);
+  // console.log("Files after update:", files);
 
   //Send file metadata and chunks
   const sendFile = () => {
@@ -155,6 +164,7 @@ export default function Home() {
       {files.length > 0 && (
         <button
           type="button"
+          onClick={sendFile}
           className="absolute bottom-4 right-4 p-1 rounded-lg text-center bg-green-100 hover:bg-green-400 transition-colors"
         >
           Send
