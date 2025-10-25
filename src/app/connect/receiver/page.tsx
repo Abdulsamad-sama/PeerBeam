@@ -6,33 +6,18 @@ import { io } from "socket.io-client";
 import { useRouter } from "next/navigation";
 
 const Page = () => {
-  // Separate input state from received sender ID
-  const [inputSenderId, setInputSenderId] = useState("");
+  const [senderId, setSenderId] = useState("");
   const { isConnected, setIsConnected, setRoomId, roomId } = useConnection();
   const [socket, setSocket] = useState<ReturnType<typeof io> | null>(null);
   const router = useRouter();
 
-  console.log(isConnected);
   useEffect(() => {
     const newSocket = io("http://localhost:3001");
-
-    newSocket.on("connection-status", (data) => {
-      setIsConnected(data.isConnected);
-      console.log("connection status:", data.isConnected);
-      console.log("isconnection status:", isConnected);
-    });
-
-    // newSocket.on("receiver-join", (data) => {
-    //   console.log("Sender ID:", data.uid);
-    //   setReceivedSenderId(data.uid); // Don't overwrite input field
-    // });
-
-    // Connection established, navigate to /page/[id]
-    // newSocket.on("init", (sender_uid) => {
-    //   router.push(`/page/${sender_uid}`);
-    // });
-
     setSocket(newSocket);
+
+    newSocket.on("me", (data) => {
+      console.log("serverid:", data.uid);
+    });
 
     return () => {
       newSocket.off("connection-status");
@@ -41,6 +26,12 @@ const Page = () => {
 
     // Cleanup on unmount
   }, []);
+
+  useEffect(() => {
+    if (isConnected) {
+      router.push("/transferringFiles"); // Navigate after the component renders
+    }
+  }, [isConnected, router]);
 
   const generateId = () => {
     return (
@@ -61,7 +52,7 @@ const Page = () => {
       return;
     }
 
-    if (!inputSenderId) {
+    if (!senderId) {
       alert("Please enter a valid sender ID.");
       return;
     }
@@ -71,20 +62,12 @@ const Page = () => {
     // Emit the receiver-join event with the generated ID and input sender ID
     socket.emit("receiver-join", {
       uid: receiver_Id,
-      sender_uid: inputSenderId,
+      sender_uid: senderId,
     });
-    console.log("isConnected:", isConnected);
-    console.log(
-      `Receiver joined with ID: ${receiver_Id}, connecting to sender: ${inputSenderId}`
-    );
 
-    //set roomId to inputSenderId
-    if (isConnected == true) {
-      setRoomId(inputSenderId);
+    if (senderId.trim() !== "") {
+      setIsConnected(true); // Set connection state to true
     }
-    console.log(roomId);
-
-    // Navigate to the new page with the sender ID
   };
 
   return (
@@ -96,8 +79,8 @@ const Page = () => {
           type="text"
           placeholder="Input sender id"
           aria-label="sender ID"
-          value={inputSenderId}
-          onChange={(e) => setInputSenderId(e.target.value)}
+          value={senderId}
+          onChange={(e) => setSenderId(e.target.value)}
           className="border-2 rounded-2xl p-2 mb-4"
         />
         <button
@@ -111,9 +94,9 @@ const Page = () => {
       <hr className="my-6" />
       <span>
         <p>Input sender's ID to connect</p>
-        {inputSenderId && (
+        {senderId && (
           <p className="text-xs text-gray-500 mt-2">
-            Connected to sender: {inputSenderId}
+            Connect to sender: {senderId}
           </p>
         )}
       </span>

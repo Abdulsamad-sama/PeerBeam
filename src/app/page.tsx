@@ -1,18 +1,19 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import { FaCaretRight, FaPlus } from "react-icons/fa6";
 import { io, Socket } from "socket.io-client";
 import { useConnection } from "@/context/ConnectionContext";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useFileProgress } from "@/context/FileProgressContext";
 
 export default function Home() {
   const [files, setFiles] = useState<File[]>([]);
   const [progress, setProgress] = useState(0);
   const [socket, setSocket] = useState<Socket | null>(null);
-  // const { roomId } = useConnection();
   const [roomId, setRoomId] = useState("");
-
-  console.log("Current Room ID:", roomId);
+  const router = useRouter();
+  const { updateFileProgress } = useFileProgress();
 
   // Initialize socket connection
   useEffect(() => {
@@ -83,7 +84,8 @@ export default function Home() {
           });
 
           offset += chunkSize;
-          setProgress(Math.min((offset / file.size) * 100, 100));
+          const progress = Math.min((offset / file.size) * 100, 100);
+          updateFileProgress(file.name, progress);
 
           if (offset < file.size) {
             readNextChunk();
@@ -100,6 +102,10 @@ export default function Home() {
     };
 
     sendNextFile();
+  };
+
+  const handlefile = () => {
+    router.push("//fileTranfering");
   };
 
   return (
@@ -136,7 +142,7 @@ export default function Home() {
         </div>
       )}
 
-      <div className="hidden sm:flex items-center text-center text-2xl text-gray-400 border-dashed border-gray-500 bg-white">
+      <div className="hidden sm:flex items-center text-center text-2xl text-gray-400 border-dashed border-gray-500">
         <FaPlus className="mr-3" />
         <p className="font-bold cursor-default ">
           Drag and drop files here to send
@@ -171,6 +177,15 @@ export default function Home() {
           <FaCaretRight className="ml-1 text-center inline-flex" />
         </button>
       )}
+
+      <div
+        draggable="true"
+        className="rounded-full absolute right-2 h-6 w-6 bg-amber-300"
+        // onDragEnd={"stop"}
+        onClick={() => router.push("/transferringFiles")}
+      >
+        <Link href="/fileTranfering"></Link>
+      </div>
     </div>
   );
 }

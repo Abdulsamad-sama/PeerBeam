@@ -2,7 +2,6 @@
 //THIS CODE LET USERS KNOW IF THE ARE CONNECTED OR NOT
 
 import React from "react";
-import { useState } from "react";
 import { useConnection } from "@/context/ConnectionContext";
 
 const connected = () => {

@@ -15,13 +15,16 @@ const io = new SocketIOServer(httpServer, {
 
 io.on("connection", (socket) => {
   socket.emit("connection-status", {
-    isConnected: true,
+    isUserConnected: true,
   });
+
   socket.on("disconnect", () => {
-    socket.emit("connection-status", { isConnected: false });
+    socket.emit("connection-status", { isUserConnected: false });
   });
 
   socket.emit("me", { uid: socket.id });
+
+ 
 
   socket.on("sender-join", (data) => {
     socket.join(data.uid);

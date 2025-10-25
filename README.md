@@ -89,3 +89,10 @@ Contributions are welcome! Once the core is stable, I’ll add a CONTRIBUTING.md
 ## 📄 License
 
 MIT License — free to use and modify.
+
+
+---
+
+## Pages to uncomment
+
+-public/ service-worker

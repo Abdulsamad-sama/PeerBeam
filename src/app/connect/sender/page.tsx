@@ -16,17 +16,14 @@ const Page = () => {
 
   // Create a socket connection only once
   useEffect(() => {
+    let receiver_Id;
     const newSocket = io("http://localhost:3001");
     setSocket(newSocket);
 
-    // Listen for connection status updates
-    newSocket.on("connection-status", (data) => {
-      setIsConnected(data.isConnected);
-      console.log("connection status:", data.isConnected);
-    });
-
-    // open history immediately after connection
-    newSocket.on("initial-connection", (senderId) => {
+    // goto home page immediately after connection
+    newSocket.on("init", (uid) => {
+      receiver_Id = uid;
+      setIsConnected(true);
       router.push(`/`);
     });
 
@@ -113,6 +110,8 @@ const Page = () => {
           Generate code
         </button>
         <b>{roomId ? roomId : ""}</b>
+
+        <p></p>
       </div>
     </div>
   );
