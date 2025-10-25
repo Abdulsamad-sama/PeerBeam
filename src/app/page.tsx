@@ -45,6 +45,7 @@ export default function Home() {
 
   //Send file metadata and chunks
   const sendFile = () => {
+    console.log("you clicked");
     if (!files || !socket || files.length === 0) return;
 
     const chunkSize = 1024 * 64; // 64KB
@@ -75,6 +76,8 @@ export default function Home() {
         const slice = file.slice(offset, offset + chunkSize);
         reader.readAsArrayBuffer(slice);
       };
+
+      console.log(readNextChunk);
 
       reader.onload = (event) => {
         if (event.target?.result && socket) {

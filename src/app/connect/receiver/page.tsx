@@ -29,7 +29,7 @@ const Page = () => {
 
   useEffect(() => {
     if (isConnected) {
-      router.push("/transferringFiles"); // Navigate after the component renders
+      router.push(`/connect/receiver/${senderId}`); // Navigate after the component renders
     }
   }, [isConnected, router]);
 

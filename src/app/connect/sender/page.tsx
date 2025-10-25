@@ -109,7 +109,17 @@ const Page = () => {
         >
           Generate code
         </button>
-        <b>{roomId ? roomId : ""}</b>
+        <div className="mt-4 flex gap-2 item-center">
+          <b>{roomId ? roomId : ""}</b>
+          {roomId && (
+            <button
+              onClick={() => navigator.clipboard.writeText(roomId)}
+              className=" text-blue-500 hover:underline"
+            >
+              Copy
+            </button>
+          )}
+        </div>
 
         <p></p>
       </div>
