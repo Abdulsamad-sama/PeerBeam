@@ -17,7 +17,8 @@ export default function Home() {
 
   // Initialize socket connection
   useEffect(() => {
-    const newSocket = io("http://localhost:3001");
+    const base_url = process.env.PUBLIC_SOCKET_URL || "http://localhost:3001";
+    const newSocket = io(base_url);
     setSocket(newSocket);
 
     newSocket.on("init", (sender_uid) => {
@@ -56,6 +57,7 @@ export default function Home() {
     const sendNextFile = () => {
       if (fileIndex >= files.length) {
         console.log("All files sent");
+        setFiles([]);
         return;
       }
 
@@ -88,6 +90,11 @@ export default function Home() {
 
           offset += chunkSize;
           const progress = Math.min((offset / file.size) * 100, 100);
+          const progressData = {
+            name: file.name,
+            progress: progress,
+          };
+          socket.emit("file-progress", { uid: roomId, progressData });
           updateFileProgress(file.name, progress);
 
           if (offset < file.size) {

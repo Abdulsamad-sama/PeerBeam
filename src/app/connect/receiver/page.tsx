@@ -12,7 +12,8 @@ const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const newSocket = io("http://localhost:3001");
+    const base_url = process.env.PUBLIC_SOCKET_URL || "http://localhost:3001";
+    const newSocket = io(base_url);
     setSocket(newSocket);
 
     newSocket.on("me", (data) => {

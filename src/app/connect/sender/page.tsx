@@ -16,10 +16,11 @@ const Page = () => {
 
   // Create a socket connection only once
   useEffect(() => {
-    let receiver_Id;
-    const newSocket = io("http://localhost:3001");
+    const base_url = process.env.PUBLIC_SOCKET_URL || "http://localhost:3001";
+    const newSocket = io(base_url);
     setSocket(newSocket);
 
+    let receiver_Id;
     // goto home page immediately after connection
     newSocket.on("init", (uid) => {
       receiver_Id = uid;

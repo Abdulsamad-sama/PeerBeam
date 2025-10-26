@@ -24,8 +24,6 @@ io.on("connection", (socket) => {
 
   socket.emit("me", { uid: socket.id });
 
- 
-
   socket.on("sender-join", (data) => {
     socket.join(data.uid);
   });
@@ -34,7 +32,13 @@ io.on("connection", (socket) => {
     socket.in(data.sender_uid).emit("init", data.uid);
   });
   socket.on("file-meta", (data) => {
+    console.log("Starting file transfer...");
+    console.log(data.metadata);
     socket.in(data.uid).emit("file-meta", data.metadata);
+  });
+  socket.on("file-progress", (data) => {
+    console.log("My progress is:", data);
+    socket.in(data.uid).emit("file-progress", data.progressData);
   });
   socket.on("file-start", (data) => {
     socket.in(data.uid).emit("file-share", {});

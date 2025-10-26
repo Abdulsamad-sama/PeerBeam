@@ -16,13 +16,18 @@ import Connected from "@/components/connected/connected";
 import { BsExclamationCircleFill } from "react-icons/bs";
 import UserAvatar from "@/components/UserAvatar/UserAvatar";
 import UserName from "@/components/UserName/UserName";
-
+import { io, Socket } from "socket.io-client";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isConnectOpen, setIsConnectOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
 
+  const baseUrl = process.env.PUBLIC_SOCKET_URL || "http://localhost:3001";
+  const newSocket = io(baseUrl);
   useEffect(() => {
+    setSocket(newSocket);
+
     function handleClickOutside(event: Event) {
       const target = event.target as Node;
       if (menuRef.current && target && !menuRef.current.contains(target)) {
@@ -32,6 +37,11 @@ const Header = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const handleDisconnect = () => {
+    console.log("Disconnected");
+    newSocket.disconnect();
+  };
 
   return (
     // Desktop view sets automatiacally
@@ -64,6 +74,11 @@ const Header = () => {
       </nav>
 
       {/* hidden menu information */}
+
+      {/* Disconnect Button */}
+      <button type="button" onClick={handleDisconnect}>
+        Disconnect
+      </button>
 
       {/* hidden section menu for mobile view */}
       <section
