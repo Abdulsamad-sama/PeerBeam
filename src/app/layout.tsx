@@ -79,10 +79,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen w-auto flex flex-col`}
       >
         <RootLayoutClient>
-          <AvatarProvider>
-            <NameProvider>
-              <ThemeProvider>
-                <ConnectionProvider>
+          <ConnectionProvider>
+            <AvatarProvider>
+              <NameProvider>
+                <ThemeProvider>
                   <FileProgressProvider>
                     <Header />
                     <div className="relative flex flex-1 h-screen overflow-hidden">
@@ -92,10 +92,10 @@ export default function RootLayout({
                       </main>
                     </div>
                   </FileProgressProvider>
-                </ConnectionProvider>
-              </ThemeProvider>
-            </NameProvider>
-          </AvatarProvider>
+                </ThemeProvider>
+              </NameProvider>
+            </AvatarProvider>
+          </ConnectionProvider>
         </RootLayoutClient>
       </body>
     </html>

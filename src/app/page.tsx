@@ -14,6 +14,7 @@ export default function Home() {
   const [roomId, setRoomId] = useState("");
   const router = useRouter();
   const { updateFileProgress } = useFileProgress();
+  const { isConnected } = useConnection();
 
   // Initialize socket connection
   useEffect(() => {
@@ -47,7 +48,13 @@ export default function Home() {
   //Send file metadata and chunks
   const sendFile = () => {
     console.log("you clicked");
-    if (!files || !socket || files.length === 0) return;
+    // ensure there are files and a connected socket; if not connected, redirect
+    if (files.length === 0) return;
+    if (!socket) return;
+    if (!isConnected) {
+      router.push("/connect/sender");
+      return;
+    }
 
     const chunkSize = 1024 * 64; // 64KB
     let fileIndex = 0;

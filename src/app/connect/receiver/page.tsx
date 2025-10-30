@@ -1,81 +1,39 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
-import { useConnection } from "@/context/ConnectionContext";
-import BackBtn from "@/components/BackBtn/BackBtn";
-import { io } from "socket.io-client";
 import { useRouter } from "next/navigation";
+import BackBtn from "@/components/BackBtn/BackBtn";
+import { useConnection } from "@/context/ConnectionContext";
 
 const Page = () => {
   const [senderId, setSenderId] = useState("");
-  const { isConnected, setIsConnected, setRoomId, roomId } = useConnection();
-  const [socket, setSocket] = useState<ReturnType<typeof io> | null>(null);
+  const { isConnected, roomId, joinSenderRoom, leaveRoom } = useConnection();
   const router = useRouter();
 
+  // navigate to the receiver transfer page when context confirms we're joined
   useEffect(() => {
-    const base_url = process.env.PUBLIC_SOCKET_URL || "http://localhost:3001";
-    const newSocket = io(base_url);
-    setSocket(newSocket);
-
-    newSocket.on("me", (data) => {
-      console.log("serverid:", data.uid);
-    });
-
-    return () => {
-      newSocket.off("connection-status");
-      newSocket.disconnect();
-    };
-
-    // Cleanup on unmount
-  }, []);
-
-  useEffect(() => {
-    if (isConnected) {
-      router.push(`/connect/receiver/${senderId}`); // Navigate after the component renders
+    if (isConnected && roomId) {
+      router.push(`/connect/receiver/${roomId}`);
     }
-  }, [isConnected, router]);
+  }, [isConnected, roomId, router]);
 
-  const generateId = () => {
-    return (
-      Math.trunc(Math.random() * 999) +
-      "-" +
-      Math.trunc(Math.random() * 999) +
-      "-" +
-      Math.trunc(Math.random() * 999)
-    );
-  };
-
-  // Function to handle connection
-  const handleConnect = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!socket) {
-      alert("Socket connection not established. Please try again.");
-      return;
-    }
-
-    if (!senderId) {
-      alert("Please enter a valid sender ID.");
-      return;
-    }
-
-    const receiver_Id = generateId();
-
-    // Emit the receiver-join event with the generated ID and input sender ID
-    socket.emit("receiver-join", {
-      uid: receiver_Id,
-      sender_uid: senderId,
-    });
-
-    if (senderId.trim() !== "") {
-      setIsConnected(true); // Set connection state to true
+    if (!senderId.trim()) return;
+    try {
+      await joinSenderRoom(senderId.trim());
+      // joinSenderRoom sets isConnected/roomId in context on success
+    } catch (err: any) {
+      console.error("Failed to join:", err);
+      alert(err?.message || "Failed to join sender room");
     }
   };
 
   return (
-    <div className=" relative h-full flex flex-col items-center justify-center p-4">
+    <div className="relative h-full flex flex-col items-center justify-center p-4">
       <BackBtn />
 
-      <form onSubmit={handleConnect} className=" flex flex-col items-center">
+      <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <input
           type="text"
           placeholder="Input sender id"
@@ -87,11 +45,12 @@ const Page = () => {
         <button
           type="submit"
           aria-label="Connect to sender"
-          className="rounded-2xl p-2 mb-4 bg1-color hover:bg-[#00ca79] hover:text-white active:text-amber-300 active:bg-[#00ca7985] transition-colors duration-300"
+          className="rounded-2xl p-2 mb-4 bg1-color hover:bg-[#00ca79] hover:text-white transition-colors duration-300"
         >
           Connect
         </button>
       </form>
+
       <hr className="my-6" />
       <span>
         <p>Input sender's ID to connect</p>
@@ -100,6 +59,20 @@ const Page = () => {
             Connect to sender: {senderId}
           </p>
         )}
+        <p className="text-xs text-gray-500 mt-2">
+          Context connected: {isConnected ? "yes" : "no"}
+        </p>
+        {/* {isConnected && (
+          <button
+            onClick={() => {
+              leaveRoom();
+              setSenderId("");
+            }}
+            className="mt-2 text-sm text-red-500"
+          >
+            Leave
+          </button>
+        )} */}
       </span>
     </div>
   );
