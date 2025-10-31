@@ -2,13 +2,12 @@
   "name": "my-eco",
   "version": "0.1.0",
   "private": true,
- 
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "start": "next start",
+    "start": "nodemon Server/server.js",
     "lint": "next lint",
-    "server": "nodemon Server/index.js"
+    "server": "nodemon Server/server.js"
   },
   "dependencies": {
     "express": "^5.1.0",

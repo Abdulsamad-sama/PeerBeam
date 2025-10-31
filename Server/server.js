@@ -5,6 +5,8 @@ import { Server as SocketIOServer } from "socket.io";
 const app = express();
 app.use(express.json()); // needed so POST /force-disconnect can receive JSON
 const httpServer = createServer(app);
+const PORT = process.env.PORT || 3001
+
 
 const io = new SocketIOServer(httpServer, {
   cors: {
@@ -12,6 +14,11 @@ const io = new SocketIOServer(httpServer, {
     methods: ["GET", "POST"],
     credentials: true,
   },
+});
+
+//to know the server works
+app.get("/", (req, res) => {
+  res.send("server is running on Render");
 });
 
 // HTTP endpoint to force-disconnect a socket by id (useful for admin / button)
@@ -88,80 +95,6 @@ io.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(3001, () => {
-  console.log("Server is running on port 3001");
+httpServer.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
-
-// import express from "express";
-// import { createServer } from "http";
-// import { Server as SocketIOServer } from "socket.io";
-
-// const app = express();
-// const httpServer = createServer(app);
-
-// const io = new SocketIOServer(httpServer, {
-//   cors: {
-//     origin: "http://localhost:3000",
-//     methods: ["GET", "POST"],
-//     credentials: true,
-//   },
-// });
-
-// io.on("connection", (socket) => {
-//   socket.emit("connection-status", {
-//     isUserConnected: true,
-//   });
-
-//   socket.on("disconnect", () => {
-//     socket.emit("connection-status", { isUserConnected: false });
-//   });
-
-//   socket.emit("me", { uid: socket.id });
-
-//   socket.on("sender-join", (data, ack) => {
-//     socket.join(data.uid);
-//     // acknowledge the join if client provided a callback
-//     if (typeof ack === "function") {
-//       ack({ success: true });
-//     }
-//   });
-
-//   socket.on("receiver-join", (data, ack) => {
-//     socket.join(data.uid);
-
-//     // check whether the sender room exists
-//     const senderRoomExists = io.sockets.adapter.rooms.has(data.sender_uid);
-
-//     // notify sender(s) in the sender_uid room that a receiver joined
-//     socket.in(data.sender_uid).emit("init", data.uid);
-
-//     // acknowledge the receiver join back to the caller
-//     if (typeof ack === "function") {
-//       if (senderRoomExists) {
-//         ack({ success: true });
-//       } else {
-//         ack({ success: false, message: "Sender not connected" });
-//       }
-//     }
-//   });
-
-//   socket.on("file-meta", (data) => {
-//     console.log("Starting file transfer...");
-//     console.log(data.metadata);
-//     socket.in(data.uid).emit("file-meta", data.metadata);
-//   });
-//   socket.on("file-progress", (data) => {
-//     console.log("My progress is:", data);
-//     socket.in(data.uid).emit("file-progress", data.progressData);
-//   });
-//   socket.on("file-start", (data) => {
-//     socket.in(data.uid).emit("file-share", {});
-//   });
-//   socket.on("file-raw", (data) => {
-//     socket.in(data.uid).emit("file-share", data.buffer);
-//   });
-// });
-
-// httpServer.listen(3001, () => {
-//   console.log("Server is running on port 3001");
-// });
