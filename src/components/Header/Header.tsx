@@ -17,17 +17,15 @@ import { BsExclamationCircleFill } from "react-icons/bs";
 import UserAvatar from "@/components/UserAvatar/UserAvatar";
 import UserName from "@/components/UserName/UserName";
 import { io, Socket } from "socket.io-client";
+import { useConnection } from "@/context/ConnectionContext";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isConnectOpen, setIsConnectOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const [socket, setSocket] = useState<Socket | null>(null);
 
-  const baseUrl = process.env.PUBLIC_SOCKET_URL || "http://localhost:3001";
-  const newSocket = io(baseUrl);
+  const { isConnected, socket, leaveRoom } = useConnection();
+
   useEffect(() => {
-    setSocket(newSocket);
-
     function handleClickOutside(event: Event) {
       const target = event.target as Node;
       if (menuRef.current && target && !menuRef.current.contains(target)) {
@@ -40,7 +38,7 @@ const Header = () => {
 
   const handleDisconnect = () => {
     console.log("Disconnected");
-    newSocket.disconnect();
+    leaveRoom();
   };
 
   return (
@@ -52,7 +50,7 @@ const Header = () => {
       >
         {isMenuOpen ? <IoClose /> : <FaBars />}
       </div>
-      <h1 className="text-3xl font-bold">My-Ecosystem</h1>
+      <h1 className="text-lg md:text-3xl font-bold">My-Ecosystem</h1>
 
       <nav className="flex items-right justify-between gap-x-4">
         {/* shows when in desktop mode */}
@@ -62,23 +60,30 @@ const Header = () => {
           </li>
         </ul>
 
-        {/* connect button */}
-        <div className="">
-          <Link
-            href="/connect"
-            className="cursor-pointer bg-gray-200 text-gray-800 p-1 hover:text-gray-200 hover:outline-gray-800 dark:hover:bg-gray-800 rounded"
-          >
-            Connect
-          </Link>
+        {/* connect/ disconnect button */}
+        <div>
+          {!isConnected ? (
+            // connetion button
+            <Link
+              href="/connect"
+              className="cursor-pointer bg-gray-200 text-gray-800 p-1 hover:text-gray-200 hover:outline-gray-800 dark:hover:bg-gray-800 rounded"
+            >
+              Connect
+            </Link>
+          ) : (
+            // Disconnect Button
+            <button
+              type="button"
+              onClick={handleDisconnect}
+              className="bg-amber-700 rounded p-1"
+            >
+              Disconnect
+            </button>
+          )}
         </div>
       </nav>
 
       {/* hidden menu information */}
-
-      {/* Disconnect Button */}
-      <button type="button" onClick={handleDisconnect}>
-        Disconnect
-      </button>
 
       {/* hidden section menu for mobile view */}
       <section

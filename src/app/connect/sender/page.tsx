@@ -3,51 +3,53 @@ import React, { useState, useEffect } from "react";
 import QRCode from "react-qr-code";
 import { TbQrcodeOff } from "react-icons/tb";
 import BackBtn from "@/components/BackBtn/BackBtn";
-import { io, Socket } from "socket.io-client";
 import { useConnection } from "@/context/ConnectionContext";
 import { useRouter } from "next/navigation";
 
 const Page = () => {
+  // Destructure the managed state, socket, and the new creation function
   const { isConnected, setIsConnected, socket, roomId, createSenderRoom } =
     useConnection();
   const [isQRCode, setIsQRCode] = useState(true);
   const router = useRouter();
 
-  // Create a socket connection only once
-
+  // Socket Listeners: Handles the 'init' event when a receiver joins the room
   useEffect(() => {
-    // goto home page immediately after connection
     if (!socket) {
       return;
     }
 
+    // Handler for when a receiver successfully joins the room
     const handleInit = () => {
-      console.log(`receiver connected to room ${roomId}`);
+      console.log(`Receiver connected to room ${roomId}.`);
       setIsConnected(true);
-      router.replace("/");
+      // Navigating away from the connection page once a receiver joins
+      router.push("/");
     };
 
-    socket.on("init", handleInit); // in case server emits 'init' event: CRITICAL CHECK LATER IN SERVER
+    // Attach listener to the managed socket
+    socket.on("init", handleInit);
 
-    // Cleanup on unmount
+    // Cleanup: ONLY remove the listeners
     return () => {
       socket.off("init", handleInit);
     };
-  }, [socket, setIsConnected, router, roomId]);
+  }, [socket, router, roomId, setIsConnected]);
 
   // Handling manual room creation
   const handleCreateRoom = (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log("UI Clicked");
     e.preventDefault();
     setIsQRCode(true);
+
+    // Use the centralized function from the context
     createSenderRoom();
-    if (!currentRoomId) {
-      setIsQRCode(false);
-    }
   };
+
   const currentRoomId = roomId;
 
   return (
-    <div className="relative flex flex-col text-center h-full p-4 pt-8">
+    <div className="relative flex flex-col text-center h-full p-4 pt-8 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen">
       <BackBtn />
       <h1 className="text-3xl text-center font-bold mt-4">
         Connect to Receiver
@@ -55,63 +57,66 @@ const Page = () => {
 
       {/* QR Code section */}
       {isQRCode ? (
-        <div className="p-4">
-          <div className="flex items-center justify-center">
-            {currentRoomId ? (
-              <QRCode value={roomId} className=" h-36 w-36" />
-            ) : (
-              <TbQrcodeOff className="text-9xl text-gray-400" />
-            )}
+        <div className="p-3 flex flex-col items-center">
+          <div
+            className={`p-4 rounded-lg shadow-xl inline-block transition-transform duration-500 `}
+          >
+            <div className="flex items-center justify-center">
+              {currentRoomId ? (
+                <QRCode value={currentRoomId} className=" h-36 w-36" />
+              ) : (
+                <TbQrcodeOff className="text-[10rem] text-gray-400" />
+              )}
+            </div>
           </div>
-          <hr className="my-4" />
+          <hr className="my-6 w-1/2 border-gray-300 dark:border-gray-700" />
           <span>
-            <p className="text-lg text-center md:mb-4">
+            <p className="text-lg text-center">
               Connect to another device by scanning the QR code or entering the
               code manually.
             </p>
           </span>
         </div>
       ) : (
-        <div className="">
-          <div className="flex items-center justify-center">
-            <TbQrcodeOff className="text-9xl" />
-          </div>
+        <div className="flex flex-col items-center justify-center p-4">
+          <TbQrcodeOff className="text-9xl text-gray-500 dark:text-gray-400" />
           <p className="text-lg mb-4">
-            Unable to generate the QR code to connect due to the following
-            issues. Please fix it and try again later.
+            QR code connection is currently unavailable.
           </p>
         </div>
       )}
 
       {/* manual connect */}
       <div className="flex flex-col items-center justify-center p-4">
-        <h2 className="text-2xl font-semibold mb-2">Manual Connect</h2>
-
-        <p className="text-lg mb-2">
-          Click the button below to generate a unique room ID for manual
-          connection.
-        </p>
+        <h2 className="text-2xl font-semibold mb-4">Manual Connect</h2>
 
         <button
           onClick={handleCreateRoom}
-          disabled={false}
-          className="border-2 p-2 rounded-2xl cursor-pointer bg1-color hover:bg-[#00ca79] hover:text-white active:text-amber-300 active:bg-[#00ca7985] transition-colors duration-300"
+          disabled={!socket} // Disable if the managed socket isn't ready
+          className={`border-2 p-3 rounded-full font-semibold transition-all duration-300 shadow-md ${
+            !socket
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-green-500 hover:bg-green-600 text-white"
+          }`}
         >
-          Generate code
+          {socket ? "Generate Room Code" : "Connecting..."}
         </button>
-        <div className="mt-4 flex gap-2 item-center">
-          <b>{roomId ? roomId : ""}</b>
-          {roomId && (
+
+        <div className="mt-6 flex flex-col items-center gap-2">
+          <b className="text-3xl font-mono text-blue-500 dark:text-blue-400">
+            {currentRoomId ? currentRoomId : "- - -"}
+          </b>
+          {currentRoomId && (
             <button
-              onClick={() => navigator.clipboard.writeText(roomId)}
-              className=" text-blue-500 hover:underline"
+              onClick={() => {
+                if (currentRoomId) navigator.clipboard.writeText(currentRoomId);
+              }}
+              className="text-sm px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-full hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
             >
-              Copy
+              Copy Code
             </button>
           )}
         </div>
-
-        <p></p>
       </div>
     </div>
   );

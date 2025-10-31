@@ -146,11 +146,13 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
 
   //create a sender room (sender flow)
   const createSenderRoom = (): string | undefined => {
+    console.log("context clicked");
     if (!socket || !socket.connected) {
       console.error("Socket not connected. cannot create sender room.");
       return undefined;
     }
     const newRoomId: string = generateId();
+    setRoomId(newRoomId);
     socket.emit("sender-join", { uid: newRoomId });
     return newRoomId;
   };

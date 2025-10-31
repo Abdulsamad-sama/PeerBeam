@@ -4,7 +4,7 @@ import { useFileProgress } from "@/context/FileProgressContext";
 import BackBtn from "@/components/BackBtn/BackBtn";
 
 const page = () => {
-  const { files } = useFileProgress();
+  const {files} = useFileProgress();
   return (
     <div className="relative  h-full dark:bg-gray-900">
       <BackBtn />
