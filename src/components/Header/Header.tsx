@@ -50,7 +50,7 @@ const Header = () => {
       >
         {isMenuOpen ? <IoClose /> : <FaBars />}
       </div>
-      <h1 className="text-lg md:text-3xl font-bold">My-Ecosystem</h1>
+      <h1 className="text-lg md:text-3xl font-bold">PeerBeam</h1>
 
       <nav className="flex items-right justify-between gap-x-4">
         {/* shows when in desktop mode */}
