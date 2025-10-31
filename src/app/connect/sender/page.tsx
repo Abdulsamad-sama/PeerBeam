@@ -8,55 +8,43 @@ import { useConnection } from "@/context/ConnectionContext";
 import { useRouter } from "next/navigation";
 
 const Page = () => {
-  const { isConnected, setIsConnected } = useConnection();
+  const { isConnected, setIsConnected, socket, roomId, createSenderRoom } =
+    useConnection();
   const [isQRCode, setIsQRCode] = useState(true);
-  const [roomId, setRoomId] = useState<string | null>(null);
-  const [socket, setSocket] = useState<Socket | null>(null);
   const router = useRouter();
 
   // Create a socket connection only once
-  useEffect(() => {
-    const base_url = process.env.PUBLIC_SOCKET_URL || "http://localhost:3001";
-    const newSocket = io(base_url);
-    setSocket(newSocket);
 
-    let receiver_Id;
+  useEffect(() => {
     // goto home page immediately after connection
-    newSocket.on("init", (uid) => {
-      receiver_Id = uid;
+    if (!socket) {
+      return;
+    }
+
+    const handleInit = () => {
+      console.log(`receiver connected to room ${roomId}`);
       setIsConnected(true);
-      router.push(`/`);
-    });
+      router.replace("/");
+    };
+
+    socket.on("init", handleInit); // in case server emits 'init' event: CRITICAL CHECK LATER IN SERVER
 
     // Cleanup on unmount
     return () => {
-      newSocket.off("connection-status");
-      newSocket.disconnect();
+      socket.off("init", handleInit);
     };
-  }, []);
-
-  // Generation of manual code
-  const GenerateId = () => {
-    return (
-      Math.trunc(Math.random() * 999) +
-      "-" +
-      Math.trunc(Math.random() * 999) +
-      "-" +
-      Math.trunc(Math.random() * 999)
-    );
-  };
+  }, [socket, setIsConnected, router, roomId]);
 
   // Handling manual room creation
   const handleCreateRoom = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsQRCode(true);
-    const newRoomId: string = GenerateId();
-    setRoomId(newRoomId);
-
-    if (socket) {
-      socket.emit("sender-join", { uid: newRoomId });
+    createSenderRoom();
+    if (!currentRoomId) {
+      setIsQRCode(false);
     }
   };
+  const currentRoomId = roomId;
 
   return (
     <div className="relative flex flex-col text-center h-full p-4 pt-8">
@@ -69,10 +57,11 @@ const Page = () => {
       {isQRCode ? (
         <div className="p-4">
           <div className="flex items-center justify-center">
-            <QRCode
-              value={roomId ? roomId : "couldnt connect"}
-              className=" h-36 w-36"
-            />
+            {currentRoomId ? (
+              <QRCode value={roomId} className=" h-36 w-36" />
+            ) : (
+              <TbQrcodeOff className="text-9xl text-gray-400" />
+            )}
           </div>
           <hr className="my-4" />
           <span>

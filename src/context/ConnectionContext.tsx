@@ -17,6 +17,7 @@ type ConnectionContextType = {
   setIsConnected: (isConnected: boolean) => void;
   socket: Socket | null;
   joinSenderRoom: (senderUid: string, timeoutMs?: number) => Promise<void>;
+  createSenderRoom: () => string | undefined;
   isReJoinAttempted: boolean;
   setIsRejoinattempted: (isreJoinAttempted: boolean) => void;
   isLoading: boolean;
@@ -143,6 +144,17 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  //create a sender room (sender flow)
+  const createSenderRoom = (): string | undefined => {
+    if (!socket || !socket.connected) {
+      console.error("Socket not connected. cannot create sender room.");
+      return undefined;
+    }
+    const newRoomId: string = generateId();
+    socket.emit("sender-join", { uid: newRoomId });
+    return newRoomId;
+  };
+
   // leave room and clear persisted join info
   const leaveRoom = () => {
     const storedReceiver = localStorage.getItem(STORAGE_RECEIVER);
@@ -170,6 +182,7 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
         setRoomId,
         socket,
         joinSenderRoom,
+        createSenderRoom,
         isReJoinAttempted,
         setIsRejoinattempted,
         isLoading: !isReJoinAttempted,
