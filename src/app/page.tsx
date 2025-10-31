@@ -111,11 +111,11 @@ export default function Home() {
   // --- Standard Component Logic ---
 
   // Check connection status on mount and redirect if not ready
-  useEffect(() => {
-    if (!roomId) {
-      router.replace("/connect/sender");
-    }
-  }, [roomId, router]);
+  // useEffect(() => {
+  //   if (!roomId) {
+  //     router.replace("/connect/sender");
+  //   }
+  // }, [roomId, router]);
 
   const handleFileChange = (fileList: FileList) => {
     const newFiles = Array.from(fileList);
@@ -130,7 +130,7 @@ export default function Home() {
       console.error(
         "Socket or Room ID not ready. Redirecting to connect page."
       );
-      // router.push("/connect/sender");
+      router.push("/connect/sender");
       return;
     }
 
