@@ -130,7 +130,7 @@ export default function Home() {
       console.error(
         "Socket or Room ID not ready. Redirecting to connect page."
       );
-      router.push("/connect/sender");
+      // router.push("/connect/sender");
       return;
     }
 
