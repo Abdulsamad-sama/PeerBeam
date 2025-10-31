@@ -17,6 +17,9 @@ type ConnectionContextType = {
   setIsConnected: (isConnected: boolean) => void;
   socket: Socket | null;
   joinSenderRoom: (senderUid: string, timeoutMs?: number) => Promise<void>;
+  isReJoinAttempted: boolean;
+  setIsRejoinattempted: (isreJoinAttempted: boolean) => void;
+  isLoading: boolean;
   leaveRoom: () => void;
 };
 
@@ -33,6 +36,7 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
   const [isConnected, setIsConnected] = useState(false); // reflects joined state (socket + server ack)
   const [roomId, setRoomId] = useState("");
   const [socket, setSocket] = useState<Socket | null>(null);
+  const [isReJoinAttempted, setIsRejoinattempted] = useState(false);
   const reconnectingRef = useRef(false);
 
   // Keys used for persistence
@@ -53,14 +57,18 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
         // nothing to rejoin — reflect connected but not joined
         setIsConnected(false);
         setRoomId("");
+        setIsRejoinattempted(true);
         return;
       }
 
       // Use ack-based join so server confirms membership
+      reconnectingRef.current = true;
       s.emit(
         "receiver-join",
         { uid: storedReceiver, sender_uid: storedSender },
         (ack: any) => {
+          reconnectingRef.current = false;
+          setIsRejoinattempted(true);
           if (ack && ack.success) {
             setRoomId(storedSender);
             setIsConnected(true);
@@ -77,7 +85,9 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
 
     s.on("connect", () => {
       // only attempt rejoin once per connection cycle
-      tryRejoin();
+      if (!isConnected && !isReJoinAttempted && !reconnectingRef.current) {
+        tryRejoin();
+      }
     });
 
     s.on("disconnect", () => {
@@ -160,6 +170,9 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
         setRoomId,
         socket,
         joinSenderRoom,
+        isReJoinAttempted,
+        setIsRejoinattempted,
+        isLoading: !isReJoinAttempted,
         leaveRoom,
       }}
     >

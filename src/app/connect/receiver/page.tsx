@@ -7,15 +7,21 @@ import { useConnection } from "@/context/ConnectionContext";
 
 const Page = () => {
   const [senderId, setSenderId] = useState("");
-  const { isConnected, roomId, joinSenderRoom, leaveRoom } = useConnection();
+  const { isConnected, roomId, joinSenderRoom, isLoading, leaveRoom } =
+    useConnection();
   const router = useRouter();
 
   // navigate to the receiver transfer page when context confirms we're joined
   useEffect(() => {
     if (isConnected && roomId) {
-      router.push(`/connect/receiver/${roomId}`);
+      router.replace(`/connect/receiver/${roomId}`);
     }
-  }, [isConnected, roomId, router]);
+  }, [isConnected, roomId, router, isLoading]);
+
+  const [showLoadingAlert, setShowLoadingAlert] = useState(false);
+  useEffect(() => {
+    setShowLoadingAlert(isLoading);
+  }, [isLoading]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,6 +37,17 @@ const Page = () => {
 
   return (
     <div className="relative h-full flex flex-col items-center justify-center p-4">
+      {/* transient alert shown while context reports loading */}
+      {showLoadingAlert && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-yellow-100 text-yellow-900 border border-yellow-300 px-4 py-2 rounded-lg shadow"
+        >
+          <span className="font-medium">Connecting to sender...</span>
+        </div>
+      )}
+
       <BackBtn />
 
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
