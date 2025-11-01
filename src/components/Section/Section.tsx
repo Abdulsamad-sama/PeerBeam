@@ -1,5 +1,6 @@
-"use clent";
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
 import Connected from "@/components/connected/connected";
 import UserAvatar from "@/components/UserAvatar/UserAvatar";
@@ -8,73 +9,107 @@ import { FaStar, FaUserCog, FaUserPlus } from "react-icons/fa";
 import { BsExclamationCircleFill } from "react-icons/bs";
 
 const Section = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const HandleInvite = async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+
+    const shareData = {
+      title: "Join me on this awesome site",
+      text: "Send files or photos to your love ones without using mobile data",
+      url: "https://localhost:3000",
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        console.log("Shared successfully");
+      } else {
+        await navigator.clipboard.writeText(shareData.url);
+        alert(
+          "sharing no supported. The link has been copied to your clipboard!"
+        );
+      }
+    } catch (error) {
+      console.error("Error sharing:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
-    <section className="relative hidden sm:flex flex-col justify-between h-full w-60 p-2 overflow-hidden  text-lg border-r border-gray-200 dark:border-gray-600 dark:bg-gray-900">
-      <main className="flex flex-col gap-4">
-        {/* username/ information */}
-        <header className="flex flex-col justify-center items-center border-b-2 border-gray-500 dark:border-gray-700 pb-2">
-          <div className="flex justify-center gap-2">
-            <UserAvatar />
-            <UserName />
-          </div>
+    <section className="relative hidden sm:flex flex-col h-full w-60 p-2 overflow-hidden bg-gray-200 dark:bg-gray-900 text-lg">
+      {/* username/ information */}
+      <header className="flex justify-around items-center border-b-2 border-gray-500 dark:border-gray-500 pb-2">
+        <UserAvatar />
+        <div className="flex flex-col justify-center gap-1">
+          <UserName />
           <Connected />
-        </header>
-
-        {/* connect */}
-        <div className="mt-4">
-          <nav>
-            <ul>
-              <li>
-                <Link href="/">Home</Link>
-              </li>
-              <li>
-                <Link
-                  href="/connect"
-                  className="cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 rounded"
-                >
-                  Connect
-                </Link>
-              </li>
-            </ul>
-          </nav>
         </div>
-      </main>
+      </header>
 
-      {/* Other information */}
-      <footer className="">
-        <ul className="mt-4 space-y-2">
-          <li>
+      <div className=" relative flex flex-col h-full">
+        <main className="flex flex-col gap-4">
+          {/* connect */}
+          <div className="mt-4 flex flex-col gap-4">
             <Link
-              href="/settings"
-              className="flex items-center gap-2 cursor-pointer"
+              href="/"
+              className="w-full cursor-pointer bg-gray-300 hover:bg-gray-400 dark:bg-gray-700 hover:dark:bg-gray-600 rounded p-2"
             >
-              <FaUserCog />
-              Settings
+              Home
             </Link>
-          </li>
-          <li>
-            <Link href="" className="flex items-center gap-2 cursor-pointer">
-              <FaUserPlus />
-              Invite friends
-            </Link>
-          </li>
-          <li>
+
             <Link
-              href="/about"
-              className="flex items-center gap-2 cursor-pointer"
+              href="/connect"
+              className="w-full cursor-pointer bg-gray-300 hover:bg-gray-400 dark:bg-gray-700 hover:dark:bg-gray-600 rounded p-2"
             >
-              <BsExclamationCircleFill />
-              About
+              Connect
             </Link>
-          </li>
-          <li className="flex items-center gap-2 cursor-pointer">
-            <Link href="" className="flex items-center gap-2 cursor-pointer">
-              <FaStar />
-              Rate us
-            </Link>
-          </li>
-        </ul>
-      </footer>
+          </div>
+        </main>
+
+        {/* Other information */}
+        <footer className="absolute bottom-2 w-full px-2">
+          <ul className="mt-4 space-y-2">
+            <li>
+              <Link
+                href="/settings"
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <FaUserCog />
+                Settings
+              </Link>
+            </li>
+            <li>
+              <button
+                type="button"
+                className={`flex items-center gap-2 ${
+                  isLoading ? `cursor-not-allowed` : "cursor-pointer"
+                }`}
+                onClick={HandleInvite}
+                disabled={isLoading}
+              >
+                <FaUserPlus />
+                Invite friends
+              </button>
+            </li>
+            <li>
+              <Link
+                href="/about"
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <BsExclamationCircleFill />
+                About
+              </Link>
+            </li>
+            <li className="flex items-center gap-2 cursor-pointer">
+              <Link href="" className="flex items-center gap-2 cursor-pointer">
+                <FaStar />
+                Rate us
+              </Link>
+            </li>
+          </ul>
+        </footer>
+      </div>
     </section>
   );
 };

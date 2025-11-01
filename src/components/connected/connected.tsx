@@ -1,5 +1,4 @@
 "use client";
-//THIS CODE LET USERS KNOW IF THE ARE CONNECTED OR NOT
 
 import React from "react";
 import { useConnection } from "@/context/ConnectionContext";
@@ -8,7 +7,7 @@ const connected = () => {
   const { isConnected } = useConnection();
   return (
     <div
-      className={`flex items-center gap-1 w-fit text-lg ${
+      className={`flex items-center gap-1 w-fit text-lg text-black ${
         isConnected ? "bg-green-100" : "bg-gray-300"
       } p-1 rounded-md`}
     >

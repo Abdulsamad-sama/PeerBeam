@@ -85,9 +85,9 @@ export default function RootLayout({
                 <ThemeProvider>
                   <FileProgressProvider>
                     <Header />
-                    <div className="relative flex flex-1 h-screen overflow-hidden">
+                    <div className="relative flex flex-1 h-screen overflow-hidden ">
                       <Section />
-                      <main className="relative flex-1 overflow-auto">
+                      <main className="relative flex-1 overflow-auto ">
                         {children}
                       </main>
                     </div>

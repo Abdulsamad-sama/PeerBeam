@@ -12,14 +12,14 @@ import { io, Socket } from "socket.io-client";
 
 type ConnectionContextType = {
   isConnected: boolean;
+  setIsConnected: (isConnected: boolean) => void;
   roomId: string;
   setRoomId: (id: string) => void;
-  setIsConnected: (isConnected: boolean) => void;
   socket: Socket | null;
   joinSenderRoom: (senderUid: string, timeoutMs?: number) => Promise<void>;
   createSenderRoom: () => string | undefined;
   isReJoinAttempted: boolean;
-  setIsRejoinattempted: (isReJoinAttempted: boolean) => void;
+  setIsRejoinAttempted: (isreJoinAttempted: boolean) => void;
   isLoading: boolean;
   leaveRoom: () => void;
 };
@@ -34,43 +34,48 @@ const generateId = () =>
   )}-${Math.trunc(Math.random() * 999)}`;
 
 export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
-  const [isConnected, setIsConnected] = useState(false);
+  const [isConnected, setIsConnected] = useState(false); // reflects joined state (socket + server ack)
   const [roomId, setRoomId] = useState("");
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [isReJoinAttempted, setIsRejoinattempted] = useState(false);
+  const [isReJoinAttempted, setIsRejoinAttempted] = useState(false);
   const reconnectingRef = useRef(false);
 
+  // Keys used for persistence
   const STORAGE_RECEIVER = "receiverId";
   const STORAGE_SENDER = "joinedSenderId";
 
   useEffect(() => {
     const base_url =
-      process.env.NEXT_PUBLIC_SOCKET_URL || "https://peerbeam.onrender.com";
+      process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:8000";
     const s = io(base_url, { autoConnect: true });
     setSocket(s);
 
+    // Attempt to re-join if we have persisted join info when socket connects
     const tryRejoin = () => {
       const storedReceiver = localStorage.getItem(STORAGE_RECEIVER);
       const storedSender = localStorage.getItem(STORAGE_SENDER);
 
       if (!storedReceiver || !storedSender) {
+        // nothing to rejoin — reflect connected but not joined
         setIsConnected(false);
         setRoomId("");
-        setIsRejoinattempted(true);
+        setIsRejoinAttempted(true);
         return;
       }
 
+      // Use ack-based join so server confirms membership
       reconnectingRef.current = true;
       s.emit(
         "receiver-join",
         { uid: storedReceiver, sender_uid: storedSender },
         (ack: any) => {
           reconnectingRef.current = false;
-          setIsRejoinattempted(true);
+          setIsRejoinAttempted(true);
           if (ack && ack.success) {
             setRoomId(storedSender);
             setIsConnected(true);
           } else {
+            // server says sender not present / join failed -> clear persisted
             localStorage.removeItem(STORAGE_RECEIVER);
             localStorage.removeItem(STORAGE_SENDER);
             setRoomId("");
@@ -81,17 +86,20 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
     };
 
     s.on("connect", () => {
+      // only attempt rejoin once per connection cycle
       if (!isConnected && !isReJoinAttempted && !reconnectingRef.current) {
         tryRejoin();
       }
     });
 
     s.on("disconnect", () => {
+      // low-level socket disconnect means not joined for now
       setIsConnected(false);
     });
 
+    // Optional server events that may be used elsewhere
     s.on("init", () => {
-      // optional: handle 'init' event if needed
+      // sender notified receiver joined — not used here
     });
 
     return () => {
@@ -101,6 +109,7 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // join a sender room (receiver flow)
   const joinSenderRoom = (senderUid: string, timeoutMs = 5000) => {
     if (!socket) return Promise.reject(new Error("Socket not initialized."));
     if (!socket.connected)
@@ -125,7 +134,7 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
               setRoomId(senderUid);
               setIsConnected(true);
               resolve();
-            } catch {
+            } catch (err) {
               reject(new Error("Failed to persist join state."));
             }
           } else {
@@ -136,10 +145,11 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  //create a sender room (sender flow)
   const createSenderRoom = (): string | undefined => {
     console.log("context clicked");
     if (!socket || !socket.connected) {
-      console.error("Socket not connected. Cannot create sender room.");
+      console.error("Socket not connected. cannot create sender room.");
       return undefined;
     }
     const newRoomId: string = generateId();
@@ -148,6 +158,7 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
     return newRoomId;
   };
 
+  // leave room and clear persisted join info
   const leaveRoom = () => {
     const storedReceiver = localStorage.getItem(STORAGE_RECEIVER);
     const storedSender = localStorage.getItem(STORAGE_SENDER);
@@ -176,7 +187,7 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
         joinSenderRoom,
         createSenderRoom,
         isReJoinAttempted,
-        setIsRejoinattempted,
+        setIsRejoinAttempted,
         isLoading: !isReJoinAttempted,
         leaveRoom,
       }}

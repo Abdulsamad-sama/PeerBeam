@@ -16,14 +16,14 @@ import Connected from "@/components/connected/connected";
 import { BsExclamationCircleFill } from "react-icons/bs";
 import UserAvatar from "@/components/UserAvatar/UserAvatar";
 import UserName from "@/components/UserName/UserName";
-import { io, Socket } from "socket.io-client";
+
 import { useConnection } from "@/context/ConnectionContext";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isConnectOpen, setIsConnectOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const { isConnected, socket, leaveRoom } = useConnection();
+  const { isConnected, leaveRoom } = useConnection();
 
   useEffect(() => {
     function handleClickOutside(event: Event) {
@@ -50,7 +50,7 @@ const Header = () => {
       >
         {isMenuOpen ? <IoClose /> : <FaBars />}
       </div>
-      <h1 className="text-lg md:text-3xl font-bold">PeerBeam</h1>
+      <h1 className="text-xl md:text-3xl font-bold">PeerBeam</h1>
 
       <nav className="flex items-right justify-between gap-x-4">
         {/* shows when in desktop mode */}
@@ -75,7 +75,7 @@ const Header = () => {
             <button
               type="button"
               onClick={handleDisconnect}
-              className="bg-amber-700 rounded p-1"
+              className="bg-red-400 rounded-xl p-1.5 hover:bg-red-500 text-white cursor-pointer"
             >
               Disconnect
             </button>
@@ -92,83 +92,77 @@ const Header = () => {
           isMenuOpen ? "flex" : "hidden"
         } absolute sm:hidden left-0 top-[60px] w-50 h-[89%] p-2 text-lg flex-col justify-between text-black bg-gray-200 shadow-2xl z-50 opacity border-r border-gray-200 dark:border-gray-700`}
       >
-        <main className="flex flex-col gap-4">
-          {/* username/ information */}
-          <header className="flex flex-col justify-center items-center border-b-2 border-gray-500 dark:border-gray-700 pb-2">
-            <div className="flex justify-center gap-2">
-              <UserAvatar />
-              <UserName />
-            </div>
+        {/* username/ information */}
+        <header className="flex justify-around items-center border-b-2 border-gray-500 dark:border-gray-700 pb-2">
+          <UserAvatar />
+          <div className="flex flex-col justify-center gap-1">
+            <UserName />
             <Connected />
-          </header>
+          </div>
+        </header>
 
-          {/* files */}
-          <div className="hidden">
+        <div className=" relative flex flex-col h-full">
+          <main className="flex flex-col gap-4">
+            {/* connect */}
+            <div className="mt-4 flex flex-col gap-4">
+              <Link
+                href="/"
+                className="w-full cursor-pointer bg-gray-300 hover:bg-gray-400 dark:bg-gray-700 hover:dark:bg-gray-600 rounded p-2"
+              >
+                Home
+              </Link>
+
+              <Link
+                href="/connect"
+                className="w-full cursor-pointer bg-gray-300 hover:bg-gray-400 dark:bg-gray-700 hover:dark:bg-gray-600 rounded p-2"
+              >
+                Connect
+              </Link>
+            </div>
+          </main>
+
+          {/* Other information */}
+          <footer className="absolute bottom-10 w-full px-2">
             <ul className="mt-4 space-y-2">
               <li>
-                <Link href="/">Home</Link>
+                <Link
+                  href="/settings"
+                  className="flex items-center gap-2 cursor-pointer"
+                >
+                  <FaUserCog />
+                  Settings
+                </Link>
               </li>
               <li>
-                <Link href="/videos">Videos</Link>
+                <Link
+                  href=""
+                  className="flex items-center gap-2 cursor-pointer"
+                >
+                  <FaUserPlus />
+                  Invite friends
+                </Link>
               </li>
               <li>
-                <Link href="/pictures">Pictures</Link>
+                <Link
+                  href="/about"
+                  className="flex items-center gap-2 cursor-pointer"
+                >
+                  <BsExclamationCircleFill />
+                  About
+                </Link>
               </li>
-              <li>
-                <Link href="/documents">Document</Link>
-              </li>
-              <li>
-                <Link href="/audio">Audio</Link>
+              <li className="flex items-center gap-2 cursor-pointer">
+                <Link
+                  href=""
+                  className="flex items-center gap-2 cursor-pointer"
+                >
+                  <FaStar />
+                  Rate us
+                </Link>
               </li>
             </ul>
-          </div>
-
-          {/* connect */}
-          <div className="mt-4">
-            <Link
-              href="/connect"
-              className="flex items-center gap-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 p-2 rounded"
-            >
-              Connects
-            </Link>
-          </div>
-        </main>
-
-        {/* Other information */}
-        <footer className="">
-          <ul className="mt-4 space-y-2">
-            <li>
-              <Link
-                href="/settings"
-                className="flex items-center gap-2 cursor-pointer"
-              >
-                <FaUserCog />
-                Settings
-              </Link>
-            </li>
-            <li>
-              <Link href="" className="flex items-center gap-2 cursor-pointer">
-                <FaUserPlus />
-                Invite friends
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/about"
-                className="flex items-center gap-2 cursor-pointer"
-              >
-                <BsExclamationCircleFill />
-                About
-              </Link>
-            </li>
-            <li className="flex items-center gap-2 cursor-pointer">
-              <Link href="" className="flex items-center gap-2 cursor-pointer">
-                <FaStar />
-                Rate us
-              </Link>
-            </li>
-          </ul>
-        </footer>
+          </footer>
+        </div>
       </section>
     </header>
   );

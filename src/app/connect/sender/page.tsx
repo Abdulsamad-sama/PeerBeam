@@ -49,7 +49,7 @@ const Page = () => {
   const currentRoomId = roomId;
 
   return (
-    <div className="relative flex flex-col text-center h-full p-4 pt-8 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen">
+    <div className="relative flex flex-col text-center h-full p-4 pt-8  min-h-screen">
       <BackBtn />
       <h1 className="text-3xl text-center font-bold mt-4">
         Connect to Receiver
@@ -95,8 +95,8 @@ const Page = () => {
           disabled={!socket} // Disable if the managed socket isn't ready
           className={`border-2 p-3 rounded-full font-semibold transition-all duration-300 shadow-md ${
             !socket
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-green-500 hover:bg-green-600 text-white"
+              ? "bg-red-600 text-white cursor-not-allowed"
+              : "bg-gray-800 hover:bg-gray-600 text-white"
           }`}
         >
           {socket ? "Generate Room Code" : "Connecting..."}

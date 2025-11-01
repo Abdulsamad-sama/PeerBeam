@@ -7,7 +7,7 @@ import ThemeBtn from "@/components/ThemeBtn/ThemeBtn";
 
 const settings = () => {
   return (
-    <div className="relative flex flex-col h-full p-4 pt-8">
+    <div className="relative flex flex-col h-full p-4 pt-8 dark:bgDark">
       <BackToHomeBtn />
       <div>
         <h1 className="text-4xl text-center font-bold mb-4">

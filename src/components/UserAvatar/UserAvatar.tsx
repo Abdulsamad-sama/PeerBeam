@@ -10,7 +10,7 @@ const UserAvatar = () => {
       height={50}
       width={50}
       alt="User Avatar"
-      className="w-8 h-8 rounded-full object-cover border"
+      className="w-12 h-12 rounded-full object-cover border-1 border-gray-400"
     />
   );
 };

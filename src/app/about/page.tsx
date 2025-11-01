@@ -4,7 +4,7 @@ import React from "react";
 
 const About = () => {
   return (
-    <main className="relative overflow flex flex-col gap-8 items-center justify-center max-w-2xl mx-auto px-4 py-10 text-gray-800">
+    <main className="relative overflow flex flex-col gap-8 items-center justify-center max-w-2xl mx-auto px-4 py-10">
       <BackToHomeBtn />
       <h1 className="text-4xl font-bold mb-4">
         PeerBeam

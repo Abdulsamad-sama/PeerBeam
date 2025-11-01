@@ -124,7 +124,6 @@ export default function Home() {
 
   //Send file metadata and chunks
   const sendFile = () => {
-    // 1. Pre-transfer checks using managed state
     if (files.length === 0) return;
     if (!socket || !roomId) {
       console.error(
@@ -175,7 +174,6 @@ export default function Home() {
 
       reader.onload = (event) => {
         if (event.target?.result && socket) {
-          // 2. Send chunk data
           socket.emit("file-raw", {
             uid: roomId,
             buffer: event.target.result,
@@ -183,7 +181,7 @@ export default function Home() {
 
           offset += chunkSize;
 
-          // 3. Update and emit progress
+          // Update and emit progress for sender only
           const currentProgress = Math.min((offset / file.size) * 100, 100);
           const progressData = {
             name: file.name,
@@ -198,7 +196,7 @@ export default function Home() {
           } else {
             // File finished, ensure 100% progress is emitted
             updateFileProgress(file.name, 100);
-            // 💡 NEW: Mark file as complete in the context (removes it from activeTransfers)
+            // NEW: Mark file as complete in the context (removes it from activeTransfers)
             markFileComplete(file.name);
 
             // Move to the next file
@@ -217,7 +215,7 @@ export default function Home() {
 
   return (
     <div
-      className="relative flex flex-col gap-8 items-center justify-center h-full dark:bg-gray-900 min-h-screen p-4"
+      className="relative flex flex-col gap-8 items-center justify-center h-full p-4"
       onDragOver={(e) => {
         e.preventDefault();
         e.currentTarget.classList.add("border-blue-500");
@@ -233,22 +231,53 @@ export default function Home() {
       }}
     >
       {/* Connection Status Indicator */}
-      <p
+      {/* <p
         className={`absolute top-4 right-4 text-sm font-semibold p-1 rounded-full ${
           isConnected ? "bg-green-500 text-white" : "bg-red-500 text-white"
         }`}
       >
         {isConnected ? "Connected" : "Waiting for Receiver..."}
-      </p>
+      </p>  */}
+
+      {/* 💡 Draggable "View Transfer Status" Button - Only visible if transfers are active */}
+      {isAnyFileTransferring && (
+        <button
+          ref={buttonRef}
+          type="button"
+          className="fixed z-50 h-14 w-14 bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center shadow-2xl rounded-full transition-transform duration-300 active:cursor-grabbing"
+          style={{
+            left: 0,
+            top: 0,
+            transform: `translate(${position.x}px, ${position.y}px)`,
+            cursor: isDragging ? "grabbing" : "grab",
+          }}
+          onMouseDown={handleMouseDown}
+          onTouchStart={handleTouchStart}
+          onClick={(e) => {
+            // Prevent click event from firing if a drag just ended
+            if (!isDragging) {
+              router.push("/transferringFiles");
+            }
+          }}
+          title="View Active Transfer Status"
+        >
+          <FaCaretRight className="w-5 h-5 rotate-90" />
+        </button>
+      )}
 
       {/* Show how many file is selected*/}
       {files.length > 0 && (
-        <div className="relative w-38 h-38 p-4 text-center border-4 border-gray-400 dark:border-gray-600 rounded-3xl shadow-xl">
-          <p className="text-center mt-8 font-extrabold text-7xl text-gray-500 dark:text-gray-400">
+        <div className="relative w-38 h-38 p-4 text-center">
+          <div className="absolute top-0 left-0 w-8 h-8 border-t-8 border-l-8 border-gray-400 rounded-tl-2xl"></div>
+
+          <div className="absolute top-0 right-0 w-8 h-8 border-t-8 border-r-8 border-gray-400 rounded-tr-2xl"></div>
+
+          <div className="absolute bottom-0 left-0 w-8 h-8 border-b-8 border-l-8 border-gray-400 rounded-bl-2xl"></div>
+
+          <div className="absolute bottom-0 right-0 w-8 h-8 border-b-8 border-r-8 border-gray-400 rounded-br-2xl"></div>
+
+          <p className="text-center mt-8 font-extrabold text-6xl text-gray-500">
             {files.length}
-          </p>
-          <p className="text-sm mt-1 text-gray-500 dark:text-gray-400">
-            Files Ready
           </p>
         </div>
       )}
@@ -284,40 +313,14 @@ export default function Home() {
           onClick={sendFile}
           // Disable button if not connected to prevent sending to thin air
           disabled={!isConnected}
-          className={`absolute bottom-6 right-6 p-3 rounded-full text-center text-lg font-bold transition-all duration-300 shadow-lg ${
+          className={`absolute bottom-6 right-6 p-3 rounded-full text-center font-bold transition-all duration-300 shadow-lg ${
             isConnected
-              ? "bg-green-500 hover:bg-green-600 text-white transform hover:scale-105"
+              ? "bg-green-300 hover:bg-green-500 text-black transform hover:scale-105"
               : "bg-gray-400 text-gray-600 cursor-not-allowed"
           }`}
         >
           Send {files.length}
           <FaCaretRight className="ml-1 text-center inline-flex h-5 w-5" />
-        </button>
-      )}
-
-      {/* 💡 Draggable "View Transfer Status" Button - Only visible if transfers are active */}
-      {isAnyFileTransferring && (
-        <button
-          ref={buttonRef}
-          type="button"
-          className="fixed z-50 h-14 w-14 bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center shadow-2xl rounded-full transition-transform duration-300 active:cursor-grabbing"
-          style={{
-            left: 0,
-            top: 0,
-            transform: `translate(${position.x}px, ${position.y}px)`,
-            cursor: isDragging ? "grabbing" : "grab",
-          }}
-          onMouseDown={handleMouseDown}
-          onTouchStart={handleTouchStart}
-          onClick={(e) => {
-            // Prevent click event from firing if a drag just ended
-            if (!isDragging) {
-              router.push("/transferringFiles");
-            }
-          }}
-          title="View Active Transfer Status"
-        >
-          <FaCaretRight className="w-5 h-5 rotate-90" />
         </button>
       )}
     </div>

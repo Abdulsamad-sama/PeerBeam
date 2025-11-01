@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-// We no longer need to import 'io'
 import { useConnection } from "@/context/ConnectionContext";
 import BackBtn from "@/components/BackBtn/BackBtn";
 
@@ -10,17 +9,23 @@ type FileTransfer = {
   name: string;
   size: number;
   receivedBuffer: ArrayBuffer[];
-  progress: number; // Consolidated progress into this structure
+  progress: number;
   isComplete: boolean;
 };
 
 const ReceivingFilesPage = () => {
-  // 💡 Use the managed socket instance from the context
   const { roomId, isConnected, socket } = useConnection();
   const [files, setFiles] = useState<FileTransfer[]>([]);
   const router = useRouter();
 
-  // Function to handle the download of a file (now internal)
+  // If connection is lost, redirect back to the join page.
+  useEffect(() => {
+    if (!isConnected || !roomId) {
+      router.replace("/connect");
+    }
+  }, [isConnected, roomId, router]);
+
+  // Function to handle the download of a file
   const handleDownload = useCallback((file: FileTransfer) => {
     const blob = new Blob(file.receivedBuffer, {
       type: "application/octet-stream",
@@ -33,27 +38,12 @@ const ReceivingFilesPage = () => {
     URL.revokeObjectURL(downloadUrl);
   }, []);
 
-  // 1. CRITICAL: Redirection useEffect
-  // If the context indicates connection is lost, redirect back to the join page.
-  useEffect(() => {
-    // We only redirect if we are NOT connected AND the room ID is invalid/empty.
-    // However, since connection failure will set isConnected=false, this is the main guard.
-    if (!isConnected || !roomId) {
-      router.replace("/connect/receiver");
-    }
-  }, [isConnected, roomId, router]);
-
   // 2. Socket Listener Effect
   useEffect(() => {
-    // 💡 Use the managed socket. If it's not ready, or we are not in a room, exit.
+    // If  we are not in a room/conected, exit.
     if (!socket || !roomId) {
       return;
     }
-
-    // Since ConnectionProvider handles the initial 'receiver-join' (for re-join/persistence),
-    // we only need to attach the listeners here. If the server requires a simple join
-    // for this page to start file transfer, you can uncomment the line below.
-    // socket.emit("receiver-join", { uid: roomId });
 
     // Listen for file metadata
     const handleFileMeta = (metadata: { name: string; size: number }) => {
@@ -186,8 +176,8 @@ const ReceivingFilesPage = () => {
                 <div
                   className={`h-2.5 rounded-full transition-all duration-500 ${
                     file.progress === 100 ? "bg-green-500" : "bg-blue-500"
-                  }}
-                        style={{ width: ${file.progress.toFixed(1)}% }`}
+                  }`}
+                  style={{ width: `${file.progress.toFixed(1)}%` }}
                 ></div>
               </div>
               <p className="text-sm font-medium mt-1 text-right">

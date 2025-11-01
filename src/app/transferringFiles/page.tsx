@@ -4,9 +4,9 @@ import { useFileProgress } from "@/context/FileProgressContext";
 import BackBtn from "@/components/BackBtn/BackBtn";
 
 const page = () => {
-  const {files} = useFileProgress();
+  const { files } = useFileProgress();
   return (
-    <div className="relative  h-full dark:bg-gray-900">
+    <div className="relative h-full">
       <BackBtn />
       <div className=" flex flex-col p-14 ">
         <h1 className="text-2xl md:text-3xl font-extrabold">Shared Files</h1>

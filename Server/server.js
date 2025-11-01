@@ -5,13 +5,12 @@ import { Server as SocketIOServer } from "socket.io";
 const app = express();
 app.use(express.json()); // needed so POST /force-disconnect can receive JSON
 const httpServer = createServer(app);
-const PORT = process.env.PORT || 3001
-
+const PORT = process.env.PORT || "8000";
 
 const io = new SocketIOServer(httpServer, {
   cors: {
-    origin: "https://peer-beam-five.vercel.app",
-    methods: ["GET", "POST"], 
+    origin: [process.env.FRONTEND_URL, "http://localhost:3000"],
+    methods: ["GET", "POST"],
     credentials: true,
   },
 });

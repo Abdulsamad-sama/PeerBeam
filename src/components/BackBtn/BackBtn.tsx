@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { FaCaretLeft } from "react-icons/fa6";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 const BackBtn = () => {
   const router = useRouter();
@@ -9,11 +9,10 @@ const BackBtn = () => {
     <button
       type="button"
       onClick={() => router.back()}
-      className="absolute top-2 md:top-8 left-2 text-black rounded-full bg-gray-200 hover:bg-gray-300 p-2 flex items-center gap-2 shadow"
-      aria-label="Back to Home"
+      className="absolute top-2 md:top-5 left-14 rounded-full hover:text-gray-300 hover:scale-120 flex items-center shadow-2xl transition-transform duration-200 ease-in-out cursor-pointer"
+      aria-label="Go Back"
     >
-      <FaCaretLeft className="text-xl" />
-      <span className="font-semibold">Back</span>
+      <FaArrowLeftLong className="text-2xl" />
     </button>
   );
 };
