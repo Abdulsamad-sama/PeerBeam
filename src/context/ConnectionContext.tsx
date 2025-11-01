@@ -45,7 +45,7 @@ export const ConnectionProvider = ({ children }: { children: ReactNode }) => {
   const STORAGE_SENDER = "joinedSenderId";
 
   useEffect(() => {
-    const base_url = process.env.PUBLIC_SOCKET_URL || "http://localhost:3001";
+    const base_url = process.env.PUBLIC_SOCKET_URL || “https://peerbeam.onrender.com”;
     const s = io(base_url, { autoConnect: true });
     setSocket(s);
 
